@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>چاتی‌پاتی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&family=Lalezar&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--line:#b9a274;--gold:#e3d1a7;--teal:#38dbd1;--white:#f5ecd5;--muted:#a2b8b5;--shadow:0 12px 32px #00171b77;--font-body:'Vazirmatn', Tahoma}
+*{box-sizing:border-box}body{margin:0;color:var(--white);background:radial-gradient(ellipse at 50% 0%,#17494c 0,#0b2c31 60%,#071f25 100%);font:13px/1.9 var(--font-body);min-height:100vh}
+header{position:sticky;top:0;z-index:30;border-bottom:2px solid var(--line);background:#0f3338f5;backdrop-filter:blur(18px)}
+.head{max-width:1080px;margin:auto;display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--gold);font-size:18px}
+.brand img{width:42px;height:42px;border-radius:10px;border:2px solid var(--line);object-fit:cover}
+.pill{display:inline-flex;gap:6px;align-items:center;background:#0c2b30;border:1px solid #b9a27466;border-radius:20px;padding:4px 10px;font-size:11px;color:var(--gold)}
+.shell{max-width:1080px;margin:auto;padding:0 14px 110px}
+.view[hidden]{display:none!important}
+.panel{border:1.5px solid #b9a27477;background:linear-gradient(150deg,#183f43f2,#102e34f2);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin:14px 0}
+.panel h2{margin:0 0 10px;color:var(--gold);font-size:16px}
+.panel h3{margin:14px 0 8px;color:var(--teal);font-size:13px;border-bottom:1px solid #b9a27433;padding-bottom:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{position:relative;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#102f34;cursor:pointer;transition:.2s;box-shadow:var(--shadow);min-height:145px}
+.card:hover{transform:translateY(-3px);border-color:#e9d7aa}
+.card img{width:100%;height:90px;object-fit:cover;display:block}
+.card .info{padding:8px 10px}
+.card h4{margin:0;color:var(--gold);font-size:11.5px}
+.card p{margin:2px 0 0;color:var(--muted);font-size:10px;line-height:1.5}
+.badge{position:absolute;top:7px;right:7px;background:linear-gradient(130deg,#50e4d7,#1ebebc);color:#07353a;font-size:9px;font-weight:bold;padding:3px 7px;border-radius:20px}
+.primary{background:linear-gradient(130deg,#50e4d7,#1ebebc);color:#07353a;border:1px solid #66eadd;border-radius:11px;padding:9px 16px;font-weight:bold;cursor:pointer;min-height:40px}
+.secondary{border:1px solid #b9a27480;border-radius:11px;background:#183f44;color:var(--gold);padding:8px 12px;min-height:38px;cursor:pointer}
+.input{width:100%;background:#0c2b30;border:1.5px solid var(--line);border-radius:11px;color:var(--white);padding:11px;text-align:right;font-size:13px;font-family:var(--font-body)}
+.input.ltr{direction:ltr;text-align:center}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.stats div{background:#0c3035;border:1px solid #baa57570;border-radius:10px;padding:10px;text-align:center}
+.stats small{color:var(--muted);display:block;font-size:10px}
+.stats strong{color:var(--teal);font-size:16px;display:block}
+.bottom{position:fixed;bottom:0;right:0;left:0;z-index:35;background:#0f3338f5;border-top:2px solid var(--line);backdrop-filter:blur(18px)}
+.bottom-inner{max-width:1080px;margin:auto;display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;justify-content:space-around}
+.bottom-inner::-webkit-scrollbar{display:none}
+.nav{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;color:var(--gold);font-size:10px;cursor:pointer;font-family:var(--font-body);flex:1 1 0;min-width:56px;white-space:nowrap}
+.nav.active{color:var(--teal);background:#0c2b3044;border-radius:10px}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#ede0bc;color:#16383d;border-radius:9px;padding:9px 14px;font-size:11px;z-index:90;display:none;max-width:90vw}
+.toast.show{display:block}
+.hero{position:relative;border:2px solid var(--line);border-radius:18px;overflow:hidden;min-height:140px;background:#0f2e33;box-shadow:var(--shadow);margin-bottom:12px}
+.hero img.bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0f2e33 25%,#0f2e33bb 60%,transparent 90%)}
+.hero-content{position:relative;z-index:2;display:flex;gap:14px;align-items:center;padding:16px}
+.hero-content img.avatar{width:76px;height:76px;border-radius:16px;border:2px solid var(--line);object-fit:cover}
+.note{border:1px solid #b9a27445;border-radius:10px;background:#102f34;color:var(--muted);font-size:11px;padding:8px 10px;margin-top:8px}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:280px;margin:10px auto}
+.cell{aspect-ratio:1;border:1.5px solid var(--line);border-radius:12px;background:linear-gradient(140deg,#12353a,#0f2e33);color:var(--teal);font-size:28px;display:grid;place-items:center;cursor:pointer}
+.levelGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.levelCard{border:1.5px solid var(--line);border-radius:14px;overflow:hidden;background:#102f34;text-align:center}
+.levelCard img{width:100%;height:90px;object-fit:cover}
+.content-item{border-bottom:1px solid #b9a27433;padding:12px 0;color:var(--white);font-size:13px;line-height:1.9}
+.content-item:last-child{border-bottom:0}
+/* font strip */
+.fontStrip{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:10px;padding:8px 0 12px;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none}
+.fontStrip::-webkit-scrollbar{display:none}
+.fontCard{flex:0 0 110px;scroll-snap-align:start;border:1.5px solid var(--line);border-radius:14px;background:#102f34;padding:12px 8px;text-align:center;cursor:pointer;transition:.2s;min-height:80px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.fontCard.active{border-color:var(--teal);background:#0c3035;box-shadow:0 0 12px #38dbd155}
+.fontCard .preview{font-size:22px;color:var(--gold);line-height:1.2}
+.fontCard small{color:var(--muted);font-size:10px}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr} .stats{grid-template-columns:1fr 1fr} .levelGrid{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.grid{grid-template-columns:1fr} .hero-content{flex-direction:column;text-align:center} .nav{font-size:9px;min-width:50px;padding:6px 1px}}
+</style>
+</head>
+<body>
+<header><div class="head"><div class="brand"><img src="../assets/mascot.png"><span>چاتی‌پاتی</span></div><span class="pill" id="topPill">آنلاین</span></div></header>
+
+<div class="shell">
+
+  <section id="home" class="view">
+    <div class="hero"><img class="bg" src="../assets/game-choice.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">خانه</h2><p style="margin:4px 0 0;color:#d1ded7;font-size:11px">امروز، مأموریت‌ها، سرگرمی و جستجو</p></div></div></div>
+    <div class="panel">
+      <h3>☀️ امروز من</h3><div class="grid2">
+        <div class="card" data-page="today"><img src="../assets/acc-today.jpg"><div class="info"><h4>امروز من</h4><p>خلاصه فعالیت و استریک</p></div></div>
+        <div class="card" data-page="missions"><img src="../assets/acc-missions.jpg"><div class="info"><h4>مأموریت‌ها</h4><p>روزانه و هفتگی</p></div></div>
+      </div>
+      <h3>🧠 سرگرمی و محتوا</h3><div class="grid" id="contentGrid"></div>
+      <h3>💾 ذخیره‌ها</h3><div class="grid2">
+        <div class="card" data-page="saved"><img src="../assets/acc-saved.jpg"><div class="info"><h4>ذخیره‌شده‌ها</h4><p>علاقه‌مندی‌ها</p></div></div>
+        <div class="card" data-page="search"><img src="../assets/tool-unit.jpg"><div class="info"><h4>جستجو</h4><p>در بین متن‌ها</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="games" class="view" hidden>
+    <div class="hero"><img class="bg" src="../assets/game-duel.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">بازی‌ها</h2><p style="margin:4px 0 0;color:#d1ded7;font-size:11px">سریع، فکری، رقابتی و پرونده</p></div></div></div>
+    <div class="panel">
+      <h3>🎁 جایزه‌ای</h3><div class="grid2">
+        <div class="card" data-game="coin"><img src="../assets/econ-daily.jpg"><div class="info"><h4>شیر یا خط</h4><p>جایزه روزانه</p></div></div>
+        <div class="card" data-game="magic"><img src="../assets/content-magic.jpg"><div class="info"><h4>گوی جادویی</h4><p>پاسخ شانسی</p></div></div>
+      </div>
+      <h3>🎲 سریع</h3><div class="grid">
+        <div class="card" data-game="rps"><img src="../assets/game-rps.jpg"><div class="info"><h4>سنگ کاغذ قیچی</h4><p>رقابت سریع</p></div></div>
+        <div class="card" data-game="dice"><img src="../assets/tool-random.jpg"><div class="info"><h4>تاس</h4><p>حدس عدد تاس</p></div></div>
+        <div class="card" data-game="guess"><img src="../assets/game-guess.jpg"><div class="info"><h4>حدس عدد</h4><p>۱ تا ۱۰۰</p></div></div>
+      </div>
+      <h3>🧠 فکری</h3><div class="grid">
+        <div class="card" data-game="quiz"><span class="badge">+۱۲ XP</span><img src="../assets/game-quiz-neon.jpg"><div class="info"><h4>آزمون</h4><p>۳۹۵ سوال</p></div></div>
+        <div class="card" data-game="knowledge"><img src="../assets/content-fact.jpg"><div class="info"><h4>دانستنی‌ها</h4><p>اطلاعات عمومی</p></div></div>
+        <div class="card" data-game="sequence"><img src="../assets/game-sequence.jpg"><div class="info"><h4>الگوی اعداد</h4><p>پیدا کردن الگو</p></div></div>
+        <div class="card" data-game="scramble"><img src="../assets/game-scramble.jpg"><div class="info"><h4>کلمه درهم</h4><p>مرتب کردن حروف</p></div></div>
+        <div class="card" data-game="speed"><img src="../assets/tool-calc.jpg"><div class="info"><h4>ریاضی سریع</h4><p>۱۰ ثانیه‌ای</p></div></div>
+        <div class="card" data-game="learnquiz"><img src="../assets/learn-learnquiz.jpg"><div class="info"><h4>تمرین یادگیری</h4><p>مرور درس‌ها</p></div></div>
+      </div>
+      <h3>🧪 مینی</h3><div class="grid">
+        <div class="card" data-game="compare"><img src="../assets/game-compare.jpg"><div class="info"><h4>عدد بزرگ‌تر</h4><p>تشخیص سریع</p></div></div>
+        <div class="card" data-game="odd"><img src="../assets/game-odd.jpg"><div class="info"><h4>متفاوت</h4><p>پیدا کردن فرق</p></div></div>
+      </div>
+      <h3>❌⭕ دوز و مافیا</h3><div class="grid"><div class="card" data-game="ttt"><span class="badge">۳ سطح</span><img src="../assets/game-ttt.jpg"><div class="info"><h4>دوز باستانی</h4><p>سه سطح سختی</p></div></div><div class="card" data-game="mafia"><img src="../assets/game-mafia.jpg"><div class="info"><h4>مافیا</h4><p>تو کارآگاه</p></div></div></div>
+      <h3>⚔️ رقابتی</h3><div class="grid">
+        <div class="card" data-game="duel"><span class="badge">زنده</span><img src="../assets/game-duel.jpg"><div class="info"><h4>دوئل</h4><p>۳ سوال ۱۵ ثانیه</p></div></div>
+        <div class="card" data-game="friends"><img src="../assets/game-team.jpg"><div class="info"><h4>چالش دوستان</h4><p>با کد دعوت</p></div></div>
+        <div class="card" data-game="team"><span class="badge">۲-۸ نفر</span><img src="../assets/game-team.jpg"><div class="info"><h4>تیمی</h4><p>اتاق CHATI</p></div></div>
+      </div>
+      <h3>🕵️ پرونده و فصل</h3><div class="grid">
+        <div class="card" data-game="cases"><span class="badge">+۲۰ XP</span><img src="../assets/game-cases.jpg"><div class="info"><h4>پرونده مرموز</h4><p>حل معمای جنایی</p></div></div>
+        <div class="card" data-game="digital"><span class="badge">۲۰ سوال</span><img src="../assets/learn-digital.jpg"><div class="info"><h4>سواد دیجیتال</h4><p>امنیت دیجیتال</p></div></div>
+        <div class="card" data-game="records"><img src="../assets/econ-leaderboard.jpg"><div class="info"><h4>رکوردها</h4><p>جدول فصل</p></div></div>
+      </div>
+    </div>
+    <div class="panel" id="gamePlay" hidden><h2 id="gpTitle">بازی</h2><div id="gpBox"></div><button class="secondary" id="backBtn">بازگشت</button></div>
+  </section>
+
+  <section id="learn" class="view" hidden>
+    <div class="hero"><img class="bg" src="../assets/learn-lesson.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">یادگیری</h2><p style="margin:4px 0 0;color:#d1ded7;font-size:11px">لغت، درس، دانستنی و واژه‌نامه</p></div></div></div>
+    <div class="panel"><div class="grid" id="learnGrid"></div></div>
+  </section>
+
+  <section id="economy" class="view" hidden>
+    <div class="hero"><img class="bg" src="../assets/game-shop.jpg"><div class="hero-content"><img class="avatar" src="../assets/game-shop.jpg"><div><h2 style="margin:0;color:var(--gold)">اقتصاد</h2><p style="margin:4px 0 0;color:#d1ded7;font-size:11px">فروشگاه و دارایی</p></div></div></div>
+    <div class="panel">
+      <h3>🛒 فروشگاه</h3><div class="grid" id="shopGrid"></div>
+      <h3>💰 دارایی</h3><div class="grid" id="econGrid"></div>
+    </div>
+  </section>
+
+  <section id="account" class="view" hidden>
+    <div class="hero"><img class="bg" src="../assets/account-hero.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">حساب من</h2><p style="margin:4px 0 0;color:#d1ded7;font-size:11px">پروفایل، سطح‌ها و دستاوردها</p></div></div></div>
+    <div class="panel">
+      <h2>👤 پروفایل</h2>
+      <div id="loginArea"><input id="uid" class="input ltr" placeholder="شناسه عددی"><button class="primary" id="sendCode" style="width:100%;margin-top:8px">دریافت کد ورود</button><div id="otp" hidden style="margin-top:10px"><input id="code" class="input ltr" maxlength="8" placeholder="کد ۸ رقمی"><button class="primary" id="verify" style="width:100%;margin-top:8px">ورود</button></div><div class="note" id="loginNote">اگر قبلا وارد شدی، خودکار وارد میشی - اطلاعاتت ذخیره میمونه</div></div>
+      <div id="prof" hidden>
+        <h3 style="color:var(--gold)" id="profName">کاربر چاتی‌پاتی</h3>
+        <div class="stats"><div><small>🪙 سکه</small><strong id="coinVal">۱۲۵۰</strong></div><div><small>⭐ XP</small><strong id="xpVal">۸۷۰</strong></div><div><small>🎮 بازی‌ها</small><strong id="gamesVal">۴۲</strong></div><div><small>🏆 بردها</small><strong>۱۸</strong></div></div>
+        <div class="stats" style="margin-top:8px"><div><small>🔥 استریک</small><strong>۵</strong></div><div><small>📅 روزها</small><strong>۱۲</strong></div><div><small>⚔️ دوئل</small><strong>۷</strong></div><div><small>📚 یادگیری</small><strong>۲۳</strong></div></div>
+        <div class="note">سطح: <span id="levelVal">۴</span> | تا سطح بعد: <span id="nextXp">۱۳۰ XP</span> | لیگ: <span id="leagueVal">نقره</span></div>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="primary" id="daily">🎁 پاداش روزانه</button><button class="secondary" id="logout">خروج</button></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>📈 سطح‌ها</h2>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="secondary" id="genderMale">👨 پسر</button>
+        <button class="secondary" id="genderFemale">👩 دختر</button>
+        <span class="pill" id="genderLabel">انتخاب نشده</span>
+      </div>
+      <div class="levelGrid" id="levelGrid"></div>
+      <div class="panel" style="margin-top:12px;background:#0c2b30">
+        <h3>🔱 جاودانه</h3>
+        <div class="grid">
+          <div class="levelCard"><img src="../assets/level-bronze-power.jpg"><div class="info"><h4>کوروش بزرگ</h4><p>قدرت باستانی</p><button class="primary" style="width:100%;margin-top:6px" onclick="selectFinal('cyrus')">انتخاب</button></div></div>
+          <div class="levelCard"><img src="../assets/level-02-silver-female.jpg"><div class="info"><h4>بانو آناهیتا</h4><p>خرد و آب</p><button class="primary" style="width:100%;margin-top:6px" onclick="selectFinal('anahita')">انتخاب</button></div></div>
+        </div>
+        <div class="note" id="finalChoice">هنوز انتخاب نشده</div>
+      </div>
+    </div>
+    <div class="panel"><h2>🏅 دستاوردها</h2><div class="grid" id="accGrid"></div></div>
+    <div class="panel"><h2>📚 یادگیری و شخصی</h2><div class="grid" id="accLearnGrid"></div></div>
+    <div class="panel">
+      <h2>🤝 دعوت دوستان</h2>
+      <div style="background:#0c2b30;border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center">
+        <small style="color:var(--muted)">کد دعوت - ۱۵۰ سکه هدیه</small><br><strong id="refCode" style="font-size:20px;color:var(--teal)">a1b2c3d4e5f6</strong><br>
+        <button class="secondary" style="margin-top:8px" onclick="navigator.clipboard.writeText(document.getElementById('refCode').textContent);toast('کپی شد')">کپی</button>
+      </div>
+      <div class="stats" style="margin-top:10px"><div><small>در انتظار</small><strong>۲</strong></div><div><small>موفق</small><strong>۵</strong></div><div><small>سکه</small><strong>۷۵۰</strong></div><div><small>XP</small><strong>۵۰۰</strong></div></div>
+    </div>
+  </section>
+
+  <section id="settings" class="view" hidden>
+    <div class="hero"><img class="bg" src="../assets/tool-calc.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">تنظیمات</h2><p style="margin:4px 0 0;color:#d1ded7;font-size:11px">فونت، ابزارها و حریم خصوصی</p></div></div></div>
+    <div class="panel">
+      <h2>🎨 فونت - بکش به چپ و راست</h2>
+      <div class="fontStrip" id="fontStrip">
+        <div class="fontCard active" data-font="Vazirmatn"><div class="preview" style="font-family:'Vazirmatn'">چاتی‌پاتی</div><small>وزیرمتن</small></div>
+        <div class="fontCard" data-font="Noto Nastaliq Urdu"><div class="preview" style="font-family:'Noto Nastaliq Urdu';font-size:20px">چاتی‌پاتی</div><small>نستعلیق</small></div>
+        <div class="fontCard" data-font="Lalezar"><div class="preview" style="font-family:'Lalezar'">چاتی‌پاتی</div><small>لاله‌زار</small></div>
+        <div class="fontCard" data-font="Sahel"><div class="preview" style="font-family:'Vazirmatn';font-weight:700">چاتی‌پاتی</div><small>ساحل</small></div>
+        <div class="fontCard" data-font="Shabnam"><div class="preview" style="font-family:'Vazirmatn'">چاتی‌پاتی</div><small>شبنم</small></div>
+      </div>
+      <div class="note" id="fontNote">فونت فعلی: Vazirmatn - با کشیدن به چپ و راست بقیه رو ببین</div>
+    </div>
+    <div class="panel"><h2>🧮 ابزارها</h2><div class="grid" id="toolsGrid"></div></div>
+    <div class="panel"><h2>⚙️ تنظیمات</h2><div class="grid" id="settingsGrid"></div></div>
+    <div class="panel">
+      <h2>💬 پیشنهاد</h2>
+      <textarea id="feedbackText" class="input" style="height:80px;text-align:right" placeholder="ایده‌ات رو بنویس..."></textarea>
+      <button class="primary" style="width:100%;margin-top:8px" onclick="toast('ثبت شد، ممنون!')">ارسال</button>
+    </div>
+  </section>
+
+  <section id="today" class="view" hidden><div class="hero"><img class="bg" src="../assets/acc-today.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">امروز من</h2></div></div></div><div class="panel"><div class="stats"><div><small>بازی‌ها</small><strong>۳</strong></div><div><small>یادگیری</small><strong>۲</strong></div><div><small>درآمد</small><strong>۴۵ 🪙</strong></div><div><small>استریک</small><strong>۵ روز</strong></div></div><button class="secondary" style="margin-top:12px" onclick="go('home')">بازگشت</button></div></section>
+  <section id="missions" class="view" hidden><div class="hero"><img class="bg" src="../assets/acc-missions.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">مأموریت‌ها</h2></div></div></div><div class="panel"><p>۲ بازی، یک محتوا، ۳۰ سکه - زنجیره‌ای ۵ مرحله</p><button class="primary" onclick="handleMission()">دریافت پاداش</button><br><button class="secondary" style="margin-top:8px" onclick="go('home')">بازگشت</button></div></section>
+  <section id="saved" class="view" hidden><div class="hero"><img class="bg" src="../assets/acc-saved.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">ذخیره‌شده‌ها</h2></div></div></div><div class="panel"><div id="savedList" class="note">هنوز چیزی ذخیره نکردی</div><button class="secondary" style="margin-top:8px" onclick="go('home')">بازگشت</button></div></section>
+  <section id="search" class="view" hidden><div class="hero"><img class="bg" src="../assets/tool-unit.jpg"><div class="hero-content"><img class="avatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)">جستجو</h2></div></div></div><div class="panel"><input id="searchInput" class="input" placeholder="جستجو..."><button class="primary" style="margin-top:8px" onclick="doSearch()">جستجو</button><div id="searchRes" class="note" style="margin-top:10px"></div><button class="secondary" style="margin-top:8px" onclick="go('home')">بازگشت</button></div></section>
+
+  <section id="detailView" class="view" hidden>
+    <div class="hero"><img class="bg" id="detailHeroImg" src="../assets/mascot.png"><div class="hero-content"><img class="avatar" id="detailAvatar" src="../assets/mascot.png"><div><h2 style="margin:0;color:var(--gold)" id="detailTitle">عنوان</h2><p style="margin:4px 0 0;color:#d1ded7;font-size:11px" id="detailSub">توضیح</p></div></div></div>
+    <div class="panel" id="detailBody"></div>
+    <button class="secondary" style="width:100%;margin-top:10px" onclick="goBackDetail()">بازگشت</button>
+  </section>
+
+</div>
+
+<nav class="bottom"><div class="bottom-inner">
+  <button class="nav active" data-page="home">🏠<br>خانه</button>
+  <button class="nav" data-page="games">🎮<br>بازی‌ها</button>
+  <button class="nav" data-page="learn">📚<br>یادگیری</button>
+  <button class="nav" data-page="economy">💰<br>اقتصاد</button>
+  <button class="nav" data-page="account">👤<br>حساب</button>
+  <button class="nav" data-page="settings">⚙️<br>تنظیمات</button>
+</div></nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let BANK=null;
+fetch('./bank.json').then(r=>r.json()).then(j=>{ BANK=j; renderContent(); }).catch(()=>{ renderContent(); });
+function toast(t){ const el=document.getElementById('toast'); el.textContent=t; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),2500); }
+let lastPage='home';
+function go(id){ 
+  if(id!=='detailView') lastPage=id;
+  document.querySelectorAll('.view').forEach(v=>{ v.hidden=v.id!==id; }); 
+  document.querySelectorAll('.nav').forEach(n=>{ n.classList.toggle('active',n.dataset.page===id); }); 
+  const gp=document.getElementById('gamePlay'); if(id!=='games'&&gp) gp.hidden=true; 
+  window.scrollTo(0,0); 
+}
+function goBackDetail(){ go(lastPage); }
+document.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
+document.addEventListener('click', e=>{ const b=e.target.closest('[data-page]'); if(b) go(b.dataset.page); });
+document.getElementById('backBtn').onclick=()=>document.getElementById('gamePlay').hidden=true;
+
+// ---- persistence & anti-spam helpers ----
+function todayKey(){ return new Date().toISOString().slice(0,10); }
+function getLS(k, def){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):def; }catch{ return def; } }
+function setLS(k,v){ localStorage.setItem(k, JSON.stringify(v)); }
+function canEarnToday(type, id){
+  const key=`earn_${type}_${todayKey()}`;
+  const seen=getLS(key, []);
+  if(seen.includes(id)) return false;
+  seen.push(id); setLS(key, seen); return true;
+}
+function isSpamming(){
+  const now=Date.now(); const last=getLS('last_action',0);
+  if(now-last<1200) return true;
+  setLS('last_action', now); return false;
+}
+function getContentSeen(){ return getLS('content_seen_'+todayKey(), []); }
+function markContentSeen(id){ const k='content_seen_'+todayKey(); const a=getLS(k,[]); if(!a.includes(id)){ a.push(id); setLS(k,a);} }
+function getNoRepeatList(cat, allIds){
+  const key=`norepeat_${cat}`; let remaining=getLS(key, null);
+  if(!remaining || remaining.length===0){ remaining=[...allIds].sort(()=>Math.random()-0.5); }
+  return remaining;
+}
+function popNoRepeat(cat, allIds){
+  let remaining=getNoRepeatList(cat, allIds);
+  const id=remaining.pop();
+  setLS(`norepeat_${cat}`, remaining);
+  return id;
+}
+
+// ---- FONT strip ----
+const fontMap={'Vazirmatn':"'Vazirmatn', Tahoma",'Noto Nastaliq Urdu':"'Noto Nastaliq Urdu', Vazirmatn",'Lalezar':"'Lalezar', Vazirmatn",'Sahel':"'Vazirmatn', Tahoma",'Shabnam':"'Vazirmatn', Tahoma"};
+function applyFont(n){ const css=fontMap[n]||fontMap['Vazirmatn']; document.documentElement.style.setProperty('--font-body',css); document.body.style.fontFamily=css; localStorage.setItem('chatipati_font',n); document.getElementById('fontNote').textContent='فونت فعلی: '+n; document.querySelectorAll('.fontCard').forEach(c=>c.classList.toggle('active',c.dataset.font===n)); }
+document.querySelectorAll('.fontCard').forEach(c=>c.addEventListener('click',()=>applyFont(c.dataset.font)));
+const savedFont=localStorage.getItem('chatipati_font'); if(savedFont&&fontMap[savedFont]) applyFont(savedFont);
+
+// ---- DETAIL ----
+function openDetail(img, title, sub, html){
+  document.getElementById('detailHeroImg').src=img;
+  document.getElementById('detailAvatar').src=img;
+  document.getElementById('detailTitle').textContent=title;
+  document.getElementById('detailSub').textContent=sub;
+  document.getElementById('detailBody').innerHTML=html;
+  go('detailView');
+}
+
+// ---- CONTENT no repeat ----
+const CONTENT_IMGS={joke:'../assets/content-joke.jpg',riddle:'../assets/content-riddle.jpg',hafez:'../assets/content-hafez.jpg',love:'../assets/content-love.jpg',cool:'../assets/content-cool.jpg',motivation:'../assets/content-motivation.jpg',advice:'../assets/content-advice.jpg',quote:'../assets/content-quote.jpg',challenge:'../assets/content-challenge.jpg',morning:'../assets/content-morning.jpg',night:'../assets/content-night.jpg',magic:'../assets/content-magic.jpg',lesson:'../assets/content-lesson.jpg',fact:'../assets/content-fact.jpg'};
+const CONTENT_LABELS={joke:'جوک',riddle:'معما',hafez:'فال حافظ',love:'عاشقانه',cool:'خفن',motivation:'انگیزشی',advice:'پند',quote:'سخن بزرگان',challenge:'چالش',morning:'صبح بخیر',night:'شب بخیر',magic:'گوی جادویی',lesson:'درس',fact:'دانستنی'};
+
+function renderContent(){
+  const grid=document.getElementById('contentGrid');
+  if(!BANK){
+    grid.innerHTML=Object.entries(CONTENT_LABELS).map(([k,label])=>`<div class="card" data-content="${k}"><img src="${CONTENT_IMGS[k]}"><div class="info"><h4>${label}</h4><p>بزن ببین</p></div></div>`).join('');
+    grid.querySelectorAll('[data-content]').forEach(c=>c.addEventListener('click',()=>showContent(c.dataset.content)));
+    return;
+  }
+  const counts={}; for(const id in BANK.content){ const cat=BANK.content[id].category; counts[cat]=(counts[cat]||0)+1; }
+  grid.innerHTML=Object.entries(CONTENT_LABELS).map(([k,label])=>`<div class="card" data-content="${k}"><img src="${CONTENT_IMGS[k]}"><div class="info"><h4>${label}</h4><p>${counts[k]||0} مورد</p></div></div>`).join('');
+  grid.querySelectorAll('[data-content]').forEach(c=>c.addEventListener('click',()=>showContent(c.dataset.content)));
+}
+function showContent(cat){
+  if(isSpamming()){ toast('کمی صبر کن...'); return; }
+  if(!BANK){ openDetail(CONTENT_IMGS[cat], CONTENT_LABELS[cat], '', '<p>بانک لود نشده</p>'); return; }
+  const all=Object.entries(BANK.content).filter(([id,x])=>x.category===cat&&x.active!==false);
+  if(!all.length) return toast('محتوایی نیست');
+  const allIds=all.map(([id])=>id);
+  // no repeat logic
+  const nextId=popNoRepeat(cat, allIds);
+  const item=BANK.content[nextId];
+  // earn only once per day per content
+  let earnMsg='';
+  if(canEarnToday('content', nextId)){ earnMsg='<span style="color:var(--teal)">+۵ سکه</span>'; } else { earnMsg='<span style="color:var(--muted)">قبلا دیدی - امروز امتیاز نداره</span>'; }
+  const listHtml = `<div class="content-item" style="font-size:15px">${item.text}</div><div style="margin-top:10px">${earnMsg}</div><div style="display:flex;gap:8px;margin-top:12px"><button class="primary" onclick="showContent('${cat}')">بعدی</button><button class="secondary" onclick="saveContent('${nextId}')">💾 ذخیره</button></div><div class="note">جوک تکراری نشون داده نمیشه تا همه رو ببینی - بعد دوباره از اول</div>`;
+  openDetail(CONTENT_IMGS[cat], CONTENT_LABELS[cat], `${all.length} مورد`, listHtml);
+}
+function saveContent(id){
+  if(isSpamming()) return;
+  const saved=getLS('saved_contents', []);
+  if(saved.includes(id)){ toast('قبلا ذخیره کردی'); return; }
+  if(saved.length>=100){ toast('حداکثر ۱۰۰ ذخیره'); return; }
+  saved.push(id); setLS('saved_contents', saved); toast('ذخیره شد');
+}
+function doSearch(){
+  if(isSpamming()) return;
+  const q=document.getElementById('searchInput').value.trim(); if(!q||!BANK) return;
+  const res=Object.values(BANK.content).filter(x=>x.text.includes(q)).slice(0,10);
+  document.getElementById('searchRes').innerHTML=res.length?res.map(r=>`<div class="content-item">${r.text.slice(0,200)}</div>`).join(''):'چیزی پیدا نشد';
+}
+
+// ---- LEARN ----
+const LEARN_ITEMS=[
+  {id:'vocab',label:'جعبه مرور',img:'../assets/learn-vocab.jpg',desc:'لایتنر ۵ مرحله‌ای'},
+  {id:'lesson',label:'درس امروز',img:'../assets/learn-lesson.jpg',desc:'نکته آموزشی'},
+  {id:'word',label:'کلمه امروز',img:'../assets/learn-word.jpg',desc:'لغت جدید'},
+  {id:'fact',label:'دانستنی',img:'../assets/learn-fact.jpg',desc:'فکت روزانه'},
+  {id:'learnquiz',label:'تمرین',img:'../assets/learn-learnquiz.jpg',desc:'مرور درس‌ها'},
+  {id:'dictionary',label:'واژه‌نامه',img:'../assets/learn-dictionary.jpg',desc:'انگلیسی به فارسی'},
+  {id:'stats',label:'پیشرفت',img:'../assets/learn-stats.jpg',desc:'آمار یادگیری'},
+  {id:'digital',label:'سواد دیجیتال',img:'../assets/learn-digital.jpg',desc:'امنیت'}
+];
+function renderLearn(){
+  const g=document.getElementById('learnGrid');
+  g.innerHTML=LEARN_ITEMS.map(it=>`<div class="card" data-learn="${it.id}"><img src="${it.img}"><div class="info"><h4>${it.label}</h4><p>${it.desc}</p></div></div>`).join('');
+  g.querySelectorAll('[data-learn]').forEach(c=>c.addEventListener('click',()=>{
+    if(isSpamming()) return;
+    const it=LEARN_ITEMS.find(x=>x.id===c.dataset.learn);
+    const can=canEarnToday('learn', it.id);
+    openDetail(it.img, it.label, it.desc, `<p>${it.desc}</p><p>${can?'+۱۰ XP':'امروز خوندی، فردا دوباره امتیاز داره'}</p><button class="primary" onclick="toast('شروع شد')">شروع</button>`);
+  }));
+}
+renderLearn();
+
+// ---- ECONOMY ----
+const SHOP={scribe:{label:'📜 نویسنده',price:140,cat:'title'},analyst:{label:'🔎 تحلیلگر',price:160,cat:'title'},stargazer:{label:'🌌 ستاره‌بین',price:180,cat:'title'},hint:{label:'🎟 بلیت راهنما',price:4,cat:'ticket'},explorer:{label:'🧭 کاوشگر',price:100,cat:'title'},reader:{label:'📚 کتاب‌دوست',price:120,cat:'title'},champion:{label:'🏆 قهرمان',price:300,cat:'title'},legend16:{label:'🌟 اسطوره',price:800,cat:'title'},falcon16:{label:'🦅 شاهین زرین',price:1400,cat:'title'},dragon16:{label:'🐉 اژدهای پارس',price:2500,cat:'title'},immortal16:{label:'☀️ نگهبان خورشید',price:4000,cat:'title'},turquoise16:{label:'🔷 قاب فیروزه‌ای',price:600,cat:'frame'},sunframe16:{label:'☀️ قاب خورشید',price:1200,cat:'frame'}};
+document.getElementById('shopGrid').innerHTML=Object.entries(SHOP).map(([k,v])=>`<div class="card" data-shop="${k}"><img src="${v.cat==='frame'?'../assets/account-hero.jpg':'../assets/game-shop.jpg'}"><div class="info"><h4>${v.label}</h4><p>${v.price} سکه</p><button class="primary" style="width:100%;margin-top:6px" onclick="buyItem('${k}')">خرید</button></div></div>`).join('');
+function buyItem(k){
+  if(isSpamming()) return;
+  const owned=getLS('owned_items', []);
+  if(owned.includes(k)){ toast('قبلا خریدی'); return; }
+  owned.push(k); setLS('owned_items', owned); toast('خرید شد');
+}
+const ECON_ITEMS=[
+  {id:'inventory',label:'موجودی',img:'../assets/econ-inventory.jpg',desc:'آیتم‌های خریداری شده'},
+  {id:'collections',label:'مجموعه‌ها',img:'../assets/econ-collections.jpg',desc:'کلکسیون'},
+  {id:'daily',label:'پاداش روزانه',img:'../assets/econ-daily.jpg',desc:'۲۵ سکه'},
+  {id:'stats',label:'آمار',img:'../assets/econ-stats.jpg',desc:'درآمد و خرج'},
+  {id:'ledger',label:'تراکنش‌ها',img:'../assets/econ-ledger.jpg',desc:'تاریخچه'},
+  {id:'leaderboard',label:'لیدربورد',img:'../assets/econ-leaderboard.jpg',desc:'برترین‌ها'}
+];
+document.getElementById('econGrid').innerHTML=ECON_ITEMS.map(it=>`<div class="card" data-econ="${it.id}"><img src="${it.img}"><div class="info"><h4>${it.label}</h4><p>${it.desc}</p></div></div>`).join('');
+document.querySelectorAll('[data-econ]').forEach(c=>c.addEventListener('click',()=>{
+  if(isSpamming()) return;
+  const it=ECON_ITEMS.find(x=>x.id===c.dataset.econ);
+  openDetail(it.img, it.label, it.desc, `<p>${it.desc}</p>`);
+}));
+
+// ---- TOOLS ----
+const TOOL_ITEMS=[
+  {id:'calc',label:'ماشین‌حساب',img:'../assets/tool-calc.jpg',desc:'محاسبه'},
+  {id:'unit',label:'تبدیل واحد',img:'../assets/tool-unit.jpg',desc:'طول، وزن، دما'},
+  {id:'random',label:'عدد تصادفی',img:'../assets/tool-random.jpg',desc:'شانسی'},
+  {id:'choose',label:'انتخاب تصادفی',img:'../assets/tool-choose.jpg',desc:'از لیست'},
+  {id:'password',label:'رمز',img:'../assets/tool-password.jpg',desc:'رمز قوی'},
+  {id:'date',label:'تاریخ',img:'../assets/tool-date.jpg',desc:'شمسی و میلادی'},
+  {id:'datecalc',label:'محاسبه تاریخ',img:'../assets/tool-datecalc.jpg',desc:'تبدیل تاریخ'},
+  {id:'reminders',label:'یادآوری',img:'../assets/tool-reminders.jpg',desc:'یادآور'},
+  {id:'habits',label:'عادت‌ها',img:'../assets/tool-habits.jpg',desc:'پیگیری عادت'},
+  {id:'note',label:'یادداشت',img:'../assets/tool-note.jpg',desc:'ذخیره متن'},
+  {id:'todo',label:'کارها',img:'../assets/tool-todo.jpg',desc:'لیست کار'},
+  {id:'plan',label:'برنامه',img:'../assets/tool-plan.jpg',desc:'روزانه'},
+  {id:'shopping',label:'خرید',img:'../assets/tool-shopping.jpg',desc:'فهرست خرید'},
+  {id:'bucket',label:'هدف‌ها',img:'../assets/tool-bucket.jpg',desc:'اهداف بلندمدت'}
+];
+document.getElementById('toolsGrid').innerHTML=TOOL_ITEMS.map(it=>`<div class="card" data-tool="${it.id}"><img src="${it.img}"><div class="info"><h4>${it.label}</h4><p>${it.desc}</p></div></div>`).join('');
+document.querySelectorAll('[data-tool]').forEach(c=>c.addEventListener('click',()=>{
+  if(isSpamming()) return;
+  const it=TOOL_ITEMS.find(x=>x.id===c.dataset.tool);
+  openDetail(it.img, it.label, it.desc, `<p>${it.desc}</p><input class="input" placeholder="مثلا: ۱۰ دقیقه | آب"><button class="primary" style="margin-top:8px;width:100%" onclick="toast('ذخیره شد')">ذخیره</button>`);
+}));
+
+const SETTINGS_ITEMS=[
+  {id:'assistant',label:'دستیار',img:'../assets/learn-learnquiz.jpg',desc:'هوش مصنوعی'},
+  {id:'interests',label:'علایق',img:'../assets/content-cool.jpg',desc:'موضوعات مورد علاقه'},
+  {id:'name',label:'نام نمایشی',img:'../assets/tool-note.jpg',desc:'تغییر نام'},
+  {id:'board',label:'جدول رتبه',img:'../assets/econ-leaderboard.jpg',desc:'نمایش در لیدربورد'},
+  {id:'feedback',label:'بازخورد',img:'../assets/acc-achievements.jpg',desc:'نظر و پیشنهاد'},
+  {id:'privacy',label:'حریم خصوصی',img:'../assets/account-hero.jpg',desc:'داده‌ها'},
+  {id:'myid',label:'شناسه',img:'../assets/tool-unit.jpg',desc:'شناسه عددی'},
+  {id:'delete',label:'حذف',img:'../assets/tool-calc.jpg',desc:'حذف حساب'}
+];
+document.getElementById('settingsGrid').innerHTML=SETTINGS_ITEMS.map(it=>`<div class="card" data-set="${it.id}"><img src="${it.img}"><div class="info"><h4>${it.label}</h4><p>${it.desc}</p></div></div>`).join('');
+document.querySelectorAll('[data-set]').forEach(c=>c.addEventListener('click',()=>{
+  if(isSpamming()) return;
+  const it=SETTINGS_ITEMS.find(x=>x.id===c.dataset.set);
+  openDetail(it.img, it.label, it.desc, `<p>${it.desc}</p>`);
+}));
+
+// ---- ACCOUNT ----
+const ACC_ITEMS=[
+  {id:'achievements',label:'دستاوردها',img:'../assets/acc-achievements.jpg',desc:'مدال‌ها'},
+  {id:'showcase',label:'ویترین',img:'../assets/acc-showcase.jpg',desc:'نمایش پروفایل'},
+  {id:'record',label:'رکورد',img:'../assets/acc-record.jpg',desc:'بهترین‌ها'},
+  {id:'collections',label:'مجموعه‌ها',img:'../assets/acc-collections.jpg',desc:'کلکسیون'},
+  {id:'leaderboard',label:'لیدربورد',img:'../assets/acc-leaderboard.jpg',desc:'رتبه‌بندی'},
+  {id:'history',label:'فصل‌ها',img:'../assets/econ-ledger.jpg',desc:'تاریخچه فصل'}
+];
+document.getElementById('accGrid').innerHTML=ACC_ITEMS.map(it=>`<div class="card" data-acc="${it.id}"><img src="${it.img}"><div class="info"><h4>${it.label}</h4><p>${it.desc}</p></div></div>`).join('');
+document.querySelectorAll('[data-acc]').forEach(c=>c.addEventListener('click',()=>{
+  if(isSpamming()) return;
+  const it=ACC_ITEMS.find(x=>x.id===c.dataset.acc);
+  openDetail(it.img, it.label, it.desc, `<p>${it.desc}</p>`);
+}));
+const ACC_LEARN=[
+  {id:'vocab',label:'مرور لغت',img:'../assets/learn-vocab.jpg',desc:'جعبه لایتنر'},
+  {id:'habits',label:'عادت‌ها',img:'../assets/tool-habits.jpg',desc:'پیگیری'},
+  {id:'note',label:'یادداشت',img:'../assets/tool-note.jpg',desc:'متن‌ها'},
+  {id:'todo',label:'کارها',img:'../assets/tool-todo.jpg',desc:'وظایف'},
+  {id:'reminders',label:'یادآوری',img:'../assets/tool-reminders.jpg',desc:'زمان‌دار'},
+  {id:'saved',label:'ذخیره‌ها',img:'../assets/acc-saved.jpg',desc:'علاقه‌مندی'},
+  {id:'today',label:'امروز',img:'../assets/acc-today.jpg',desc:'خلاصه'},
+  {id:'friends',label:'دوستان',img:'../assets/game-team.jpg',desc:'چالش دوستان'}
+];
+document.getElementById('accLearnGrid').innerHTML=ACC_LEARN.map(it=>`<div class="card" data-acc2="${it.id}"><img src="${it.img}"><div class="info"><h4>${it.label}</h4><p>${it.desc}</p></div></div>`).join('');
+document.querySelectorAll('[data-acc2]').forEach(c=>c.addEventListener('click',()=>{
+  if(isSpamming()) return;
+  const it=ACC_LEARN.find(x=>x.id===c.dataset.acc2);
+  openDetail(it.img, it.label, it.desc, `<p>${it.desc}</p>`);
+}));
+
+// ---- LEVELS ----
+const LEVELS=[
+  {xp:5000,name:'🥉 برنز',desc:'۵K XP',img:'../assets/symbol-bronze-scifi.jpg'},
+  {xp:15000,name:'🥈 نقره',desc:'۱۵K XP',img:'../assets/symbol-silver-scifi.jpg'},
+  {xp:30000,name:'🥇 طلا',desc:'۳۰K XP',img:'../assets/symbol-gold-scifi.jpg'},
+  {xp:60000,name:'⚪ پلاتین',desc:'۶۰K XP',img:'../assets/symbol-bronze-scifi.jpg'},
+  {xp:250000,name:'💎 الماس',desc:'۲۵۰K XP',img:'../assets/symbol-gold-scifi.jpg'},
+  {xp:400000,name:'🛡️ جنگاور',desc:'۴۰۰K XP',img:'../assets/symbol-silver-scifi.jpg'},
+  {xp:900000,name:'🏅 قهرمان',desc:'۹۰۰K XP',img:'../assets/symbol-bronze-scifi.jpg'},
+  {xp:1800000,name:'🦁 سپهسالار',desc:'۱.۸M XP',img:'../assets/symbol-gold-scifi.jpg'},
+  {xp:50000000,name:'🌌 نیمه‌جاودانه',desc:'۵۰M XP',img:'../assets/level-50m-power.jpg'},
+  {xp:100000000,name:'🔱 جاودانه',desc:'۱۰۰M XP',img:'../assets/level-bronze-power.jpg'}
+];
+function renderLevels(){ const g=document.getElementById('levelGrid'); g.innerHTML=LEVELS.map(lv=>`<div class="levelCard"><img src="${lv.img}"><div class="info"><h4>${lv.name}</h4><p>${lv.xp.toLocaleString()} XP<br>${lv.desc}</p></div></div>`).join(''); }
+renderLevels();
+document.getElementById('genderMale').onclick=()=>{ setLS('gender','male'); document.getElementById('genderLabel').textContent='پسر'; toast('ذخیره شد'); };
+document.getElementById('genderFemale').onclick=()=>{ setLS('gender','female'); document.getElementById('genderLabel').textContent='دختر'; toast('ذخیره شد'); };
+const savedGender=getLS('gender',null); if(savedGender) document.getElementById('genderLabel').textContent=savedGender==='male'?'پسر':'دختر';
+function selectFinal(w){ setLS('finalChoice', w); document.getElementById('finalChoice').textContent='انتخاب: '+(w==='cyrus'?'کوروش بزرگ':'بانو آناهیتا'); toast('ذخیره شد'); }
+const savedFinal=getLS('finalChoice',null); if(savedFinal) document.getElementById('finalChoice').textContent='انتخاب: '+(savedFinal==='cyrus'?'کوروش بزرگ':'بانو آناهیتا');
+
+// ---- GAMES anti-spam ----
+const DIGITAL_QS=[
+  ['پیامی رمز یک‌بارمصرف می‌خواهد؟',['نمی‌دهم و از مسیر رسمی چک می‌کنم','می‌فرستم','نصفش را','در گروه'],0],
+  ['2FA چه فایده‌ای دارد؟',['حتی اگر رمز لو برود جلوی ورود را می‌گیرد','سرعت','ساده می‌کند','فایده ندارد'],0],
+  ['فیشینگ چیست؟',['تقلید سایت رسمی برای سرقت','بازی','اینترنت','ویروس'],0],
+];
+function openGame(id){
+  if(isSpamming()){ toast('کمی صبر کن...'); return; }
+  const box=document.getElementById('gamePlay'); const title=document.getElementById('gpTitle'); const gp=document.getElementById('gpBox');
+  box.hidden=false; box.scrollIntoView({behavior:'smooth'});
+  if(id==='quiz'){
+    title.textContent='آزمون'; if(!BANK){ gp.innerHTML='بانک لود نشده'; return; }
+    const allIds=BANK.quiz.map((_,i)=>i); const qIdx=popNoRepeat('quiz', allIds);
+    const q=BANK.quiz[qIdx];
+    const opts=[...q.options].sort(()=>Math.random()-0.5); const ans=opts.indexOf(q.answer);
+    const already=!canEarnToday('quiz', qIdx);
+    gp.innerHTML=`<p>${q.question}</p><div style="display:grid;gap:8px">${opts.map((o,i)=>`<button class="secondary" style="text-align:right" data-a="${i}" data-c="${ans}" data-idx="${qIdx}">${o}</button>`).join('')}</div><div class="note">${already?'این سوال رو امروز جواب دادی - امتیاز دوباره نداره':'پاسخ درست +۱۲ XP'}</div>`;
+    gp.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+      if(isSpamming()) return;
+      const correct=parseInt(b.dataset.a)===parseInt(b.dataset.c);
+      const idx=b.dataset.idx;
+      if(correct && canEarnToday('quiz_correct', idx)){ toast('✅ درست! +۱۲ XP'); } else if(correct){ toast('✅ درست! (امتیاز قبلا داده شد)'); } else { toast('❌ غلط'); }
+    });
+  }
+  else if(id==='digital'){
+    title.textContent='سواد دیجیتال'; let idx=0;
+    function showQ(){
+      if(idx>=DIGITAL_QS.length){ gp.innerHTML='<p>پایان! فردا دوباره میتونی امتیاز بگیری</p>'; return; }
+      const q=DIGITAL_QS[idx];
+      const can=canEarnToday('digital', idx);
+      gp.innerHTML=`<p>${q[0]}</p><div style="display:grid;gap:8px">${q[1].map((o,i)=>`<button class="secondary" style="text-align:right" data-a="${i}" data-c="${q[2]}" data-idx="${idx}">${o}</button>`).join('')}</div><div class="note">${can?'':'امروز جواب دادی'}</div>`;
+      gp.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+        if(isSpamming()) return;
+        const correct=parseInt(b.dataset.a)===parseInt(b.dataset.c);
+        const qid=b.dataset.idx;
+        if(correct && canEarnToday('digital_correct', qid)){ toast('✅ درست! +۱۰ XP'); } else if(correct){ toast('✅ درست!'); } else { toast('❌'); }
+        idx++; setTimeout(showQ,600);
+      });
+    } showQ();
+  }
+  else if(id==='ttt'){
+    title.textContent='دوز';
+    gp.innerHTML=`<div style="display:flex;gap:8px"><button class="primary" onclick="startTTT('easy')">آسان</button><button class="primary" onclick="startTTT('medium')">متوسط</button><button class="primary" onclick="startTTT('hard')">سخت</button></div><div class="board" id="tttB"></div><p id="tttMsg" style="text-align:center"></p><div class="note">هر برد فقط یک بار در روز امتیاز داره</div>`;
+    startTTT('medium');
+  }
+  else {
+    title.textContent=id;
+    const can=canEarnToday('game', id);
+    gp.innerHTML=`<p>بازی ${id}</p><p>${can?'+۵ XP':'امروز بازی کردی'}</p><button class="primary" onclick="handleGamePlay('${id}')">شروع</button>`;
+  }
+}
+function handleGamePlay(id){
+  if(isSpamming()) return;
+  if(canEarnToday('game_play', id+'_'+Date.now())){ toast('شروع شد +۵ XP'); } else { toast('شروع شد'); }
+}
+let tBoard='.........'; function startTTT(d){ tBoard='.........'; drawTTT(); } function drawTTT(){ const b=document.getElementById('tttB'); if(!b) return; b.innerHTML=[...tBoard].map((c,i)=>`<button class="cell" data-i="${i}">${c==='.'?'':c==='X'?'❌':'⭕'}</button>`).join(''); b.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{ if(isSpamming()) return; const i=parseInt(btn.dataset.i); if(tBoard[i]!='.') return; tBoard=tBoard.slice(0,i)+'X'+tBoard.slice(i+1); const f=[...tBoard].map((c,j)=>c=='.'?j:null).filter(x=>x!==null); if(f.length){ const bi=f[Math.floor(Math.random()*f.length)]; tBoard=tBoard.slice(0,bi)+'O'+tBoard.slice(bi+1); } drawTTT(); }); }
+document.querySelectorAll('[data-game]').forEach(c=>c.addEventListener('click',()=>openGame(c.dataset.game)));
+
+// ---- ACCOUNT persistence ----
+function loadAccount(){
+  const uid=getLS('chatipati_uid', null);
+  const prof=getLS('chatipati_profile', null);
+  if(uid && prof){
+    document.getElementById('loginArea').hidden=true;
+    document.getElementById('prof').hidden=false;
+    document.getElementById('profName').textContent=prof.name||'کاربر چاتی‌پاتی';
+    document.getElementById('coinVal').textContent=prof.coins||1250;
+    document.getElementById('xpVal').textContent=prof.xp||870;
+    document.getElementById('gamesVal').textContent=prof.games||42;
+  }
+}
+loadAccount();
+document.getElementById('sendCode').onclick=()=>{
+  if(isSpamming()) return;
+  const uid=document.getElementById('uid').value.trim();
+  if(!uid){ toast('شناسه رو وارد کن'); return; }
+  setLS('chatipati_uid_temp', uid);
+  document.getElementById('otp').hidden=false; toast('کد ارسال شد (دمو: 12345678)');
+};
+document.getElementById('verify').onclick=()=>{
+  if(isSpamming()) return;
+  const code=document.getElementById('code').value.trim();
+  const uid=getLS('chatipati_uid_temp','123');
+  if(code.length<4){ toast('کد کوتاهه'); return; }
+  const profile={name:'کاربر '+uid.slice(-4), coins:1250, xp:870, games:42, loginAt:Date.now()};
+  setLS('chatipati_uid', uid);
+  setLS('chatipati_profile', profile);
+  loadAccount(); toast('وارد شدی - ذخیره شد');
+};
+document.getElementById('logout').onclick=()=>{
+  localStorage.removeItem('chatipati_uid');
+  localStorage.removeItem('chatipati_profile');
+  document.getElementById('loginArea').hidden=false;
+  document.getElementById('prof').hidden=true;
+  document.getElementById('otp').hidden=true;
+  toast('خارج شدی');
+};
+document.getElementById('daily').onclick=()=>{
+  if(isSpamming()) return;
+  if(!canEarnToday('daily','daily')){ toast('امروز گرفتی - فردا بیا'); return; }
+  toast('پاداش روزانه +۲۵ سکه');
+};
+function handleMission(){
+  if(isSpamming()) return;
+  if(!canEarnToday('mission','daily_chain')){ toast('امروز گرفتی'); return; }
+  toast('پاداش زنجیره +۲۵ سکه');
+}
+
+go('home');
+</script>
+</body>
+</html>
