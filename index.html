@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>چاتی‌پاتی - از صفر</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--line:#b9a274;--gold:#e3d1a7;--teal:#38dbd1;--white:#f5ecd5;--muted:#a2b8b5;--bg1:#0f3338;--bg2:#0b2c31;--card:#102f34;--font:'Vazirmatn',Tahoma}
+*{box-sizing:border-box}body{margin:0;color:var(--white);background:radial-gradient(ellipse at 50% 0%,#17494c 0,var(--bg2) 60%,#071f25 100%);font:13px/1.9 var(--font);min-height:100vh}
+header{position:sticky;top:0;z-index:30;border-bottom:2px solid var(--line);background:#0f3338f5;backdrop-filter:blur(12px)}
+.head{max-width:1080px;margin:auto;display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 16px}
+.brand{font-weight:900;color:var(--gold);font-size:18px;display:flex;gap:8px;align-items:center}
+.pill{background:#0c2b30;border:1px solid #b9a27466;border-radius:20px;padding:4px 10px;font-size:11px;color:var(--gold)}
+.shell{max-width:1080px;margin:auto;padding:0 14px 110px}
+.view[hidden]{display:none!important}
+.panel{border:1.5px solid #b9a27477;background:linear-gradient(150deg,#183f43f2,#102e34f2);border-radius:18px;padding:16px;margin:14px 0;box-shadow:0 12px 32px #00171b77}
+.panel h2{margin:0 0 10px;color:var(--gold);font-size:16px}
+.panel h3{margin:14px 0 8px;color:var(--teal);font-size:13px;border-bottom:1px solid #b9a27433;padding-bottom:4px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{border:1.5px solid var(--line);border-radius:16px;background:var(--card);cursor:pointer;transition:.2s;min-height:120px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative;overflow:hidden}
+.card:hover{transform:translateY(-3px);border-color:#e9d7aa}
+.card .icon{font-size:32px}
+.card h4{margin:0;color:var(--gold);font-size:12px}
+.card p{margin:0;color:var(--muted);font-size:10.5px;line-height:1.5}
+.badge{position:absolute;top:8px;left:8px;background:linear-gradient(130deg,#50e4d7,#1ebebc);color:#07353a;font-size:9px;font-weight:bold;padding:3px 7px;border-radius:20px}
+.primary{background:linear-gradient(130deg,#50e4d7,#1ebebc);color:#07353a;border:1px solid #66eadd;border-radius:11px;padding:10px 16px;font-weight:bold;cursor:pointer;min-height:42px;font-family:var(--font)}
+.secondary{border:1px solid #b9a27480;border-radius:11px;background:#183f44;color:var(--gold);padding:9px 12px;min-height:40px;cursor:pointer;font-family:var(--font)}
+.input{width:100%;background:#0c2b30;border:1.5px solid var(--line);border-radius:11px;color:var(--white);padding:11px;text-align:right;font-size:13px;font-family:var(--font)}
+.input.ltr{direction:ltr;text-align:center}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px}
+.stats div{background:#0c3035;border:1px solid #baa57570;border-radius:10px;padding:10px;text-align:center}
+.stats small{color:var(--muted);display:block;font-size:10px}
+.stats strong{color:var(--teal);font-size:16px;display:block}
+.bottom{position:fixed;bottom:0;right:0;left:0;z-index:35;background:#0f3338f5;border-top:2px solid var(--line);backdrop-filter:blur(18px)}
+.bottom-inner{max-width:1080px;margin:auto;display:flex;justify-content:space-around}
+.nav{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 2px;color:var(--gold);font-size:10px;cursor:pointer;font-family:var(--font);flex:1}
+.nav.active{color:var(--teal);background:#0c2b3044;border-radius:10px}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#ede0bc;color:#16383d;border-radius:9px;padding:10px 16px;font-size:12px;z-index:90;display:none;max-width:90vw;box-shadow:0 8px 20px #0008}
+.toast.show{display:block}
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-width:280px;margin:12px auto}
+.cell{aspect-ratio:1;border:1.5px solid var(--line);border-radius:12px;background:linear-gradient(140deg,#12353a,#0f2e33);color:var(--teal);font-size:28px;display:grid;place-items:center;cursor:pointer;font-weight:bold}
+.cell.win{background:linear-gradient(140deg,#38dbd1,#1ebebc);color:#07353a;box-shadow:0 0 12px #38dbd188}
+.note{border:1px solid #b9a27445;border-radius:10px;background:#102f34;color:var(--muted);font-size:11px;padding:8px 10px;margin-top:8px}
+@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.grid{grid-template-columns:1fr}.nav{font-size:9px}}
+</style>
+</head>
+<body>
+<header><div class="head"><div class="brand">🌙 چاتی‌پاتی</div><span class="pill" id="topPill">آنلاین • از صفر</span></div></header>
+<div class="shell">
+
+<!-- HOME -->
+<section id="home" class="view">
+<div class="panel"><h2>☀️ امروز من</h2>
+<div class="stats"><div><small>سکه</small><strong id="coinHome">1250</strong></div><div><small>XP</small><strong id="xpHome">870</strong></div><div><small>بازی</small><strong id="gameHome">0</strong></div><div><small>روز</small><strong id="dayHome">1</strong></div></div>
+<div class="grid2" style="margin-top:12px">
+<div class="card" onclick="go('today')"><span class="icon">📊</span><h4>خلاصه امروز</h4><p>فعالیت و استریک</p></div>
+<div class="card" onclick="go('missions')"><span class="icon">🎯</span><h4>مأموریت‌ها</h4><p>روزانه و هفتگی</p></div>
+</div></div>
+
+<div class="panel"><h2>🧠 سرگرمی و محتوا</h2><div class="grid" id="contentGrid"></div></div>
+<div class="panel"><h2>💾 ذخیره‌ها</h2><div id="savedList"></div></div>
+<div class="panel"><h2>🔍 جستجو</h2><input id="searchInput" class="input" placeholder="جوک، معما، ..."><button class="primary" style="width:100%;margin-top:8px" onclick="doSearch()">جستجو</button><div id="searchRes" style="margin-top:10px"></div></div>
+</section>
+
+<!-- GAMES -->
+<section id="games" class="view" hidden>
+<div class="panel"><h2>🎮 همه بازی‌ها - تست شده</h2><div class="grid" id="gamesGrid"></div></div>
+<div class="panel" id="gamePlay" hidden><h2 id="gpTitle">بازی</h2><div id="gpBox"></div><button class="secondary" style="width:100%;margin-top:10px" onclick="document.getElementById('gamePlay').hidden=true">بستن</button></div>
+</section>
+
+<!-- LEARN -->
+<section id="learn" class="view" hidden>
+<div class="panel"><h2>📚 یادگیری - بدون نیاز به اینترنت</h2><div class="grid" id="learnGrid"></div></div>
+</section>
+
+<!-- ECONOMY -->
+<section id="economy" class="view" hidden>
+<div class="panel"><h2>💰 اقتصاد</h2>
+<div class="stats"><div><small>موجودی</small><strong id="coinEcon">1250</strong></div><div><small>درآمد امروز</small><strong id="earnToday">0</strong></div></div>
+<div class="grid" id="shopGrid" style="margin-top:12px"></div>
+<div style="margin-top:12px"><button class="primary" onclick="claimDaily()">🎁 پاداش روزانه +50</button></div>
+</div>
+</section>
+
+<!-- ACCOUNT -->
+<section id="account" class="view" hidden>
+<div class="panel"><h2>👤 حساب</h2>
+<div id="loginArea"><input id="nameInput" class="input" placeholder="اسم شما"><button class="primary" style="width:100%;margin-top:8px" onclick="saveName()">ذخیره نام</button></div>
+<div id="prof" hidden><p>سلام <strong id="profName">کاربر</strong> 👋</p><p>سکه: <span id="coinVal">1250</span> • XP: <span id="xpVal">870</span></p><button class="secondary" onclick="resetAll()">ریست کامل</button></div>
+<div class="panel" style="margin-top:12px"><h3>🔱 سطح جاودانه</h3><div class="grid2"><div class="card" onclick="selectFinal('cyrus')"><span class="icon">👑</span><h4>کوروش</h4><p>قدرت و خرد</p></div><div class="card" onclick="selectFinal('anahita')"><span class="icon">🌊</span><h4>آناهیتا</h4><p>آرامش و بخشش</p></div></div><div class="note" id="finalChoice"></div></div>
+</div>
+</section>
+
+<!-- SETTINGS -->
+<section id="settings" class="view" hidden>
+<div class="panel"><h2>🎨 فونت</h2><div style="display:flex;gap:8px"><button class="secondary" onclick="applyFont('Vazirmatn')">وزیرمتن</button><button class="secondary" onclick="applyFont('Lalezar')">لاله‌زار</button></div><div class="note" id="fontNote">فونت: Vazirmatn</div></div>
+<div class="panel"><h2>🧮 ابزارها</h2><div class="grid" id="toolsGrid"></div><div id="toolPlay" style="margin-top:12px"></div></div>
+<div class="panel"><h2>⚙️ شناسه</h2><p>آیدی شما: <code id="myId">...</code></p><p>تاریخ عضویت: <span id="joinDate">...</span></p></div>
+</section>
+
+<!-- DETAIL -->
+<section id="detailView" class="view" hidden>
+<div class="panel"><h2 id="detailTitle">عنوان</h2><p id="detailSub" style="color:var(--muted)"></p><div id="detailBody" style="margin-top:12px;line-height:1.9"></div><button class="secondary" style="width:100%;margin-top:12px" onclick="go(lastPage)">بازگشت</button></div>
+</section>
+
+<section id="today" class="view" hidden><div class="panel"><h2>📊 امروز</h2><p>۳ بازی، ۲ یادگیری، ۴۵ سکه، استریک ۵ روز</p><button class="secondary" onclick="go('home')">بازگشت</button></div></section>
+<section id="missions" class="view" hidden><div class="panel"><h2>🎯 مأموریت‌ها</h2><p>۲ بازی + ۱ محتوا = ۲۵ سکه</p><button class="primary" onclick="if(earnToday('mission','daily')){addCoins(25);toast('✅ +۲۵ سکه')}else toast('امروز گرفتی')">دریافت</button><br><button class="secondary" style="margin-top:8px" onclick="go('home')">بازگشت</button></div></section>
+
+</div>
+
+<nav class="bottom"><div class="bottom-inner">
+<button class="nav active" onclick="go('home')">🏠<br>خانه</button>
+<button class="nav" onclick="go('games')">🎮<br>بازی‌ها</button>
+<button class="nav" onclick="go('learn')">📚<br>یادگیری</button>
+<button class="nav" onclick="go('economy')">💰<br>اقتصاد</button>
+<button class="nav" onclick="go('account')">👤<br>حساب</button>
+<button class="nav" onclick="go('settings')">⚙️<br>تنظیمات</button>
+</div></nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== از صفر - بدون fetch - بدون بانک خارجی - همه چیز داخلیه =====
+const DATA = {
+ jokes: ["به ساعت زنگ‌دار گفتم ۵ دقیقه دیگه؛ گفت اینو از پارسال می‌شنوم!","فهرست کارها: ۱ نوشتن فهرست. ۱۰۰٪ موفق!","یخچال رو باز کردم هیچی نبود، ۵ دقیقه بعد دوباره باز کردم شاید خبر جدید اومده","چایم سرد شد چون داشتم درباره زندگی در لحظه می‌خوندم","خواستم از منطقه امن بیام بیرون، سرد بود برگشتم پتو بردارم"],
+ riddles: [{q:"هرچی بیشتر برداری بزرگتر میشه؟",a:"چاله"},{q:"دندان داره ولی غذا نمی‌خوره؟",a:"شانه"},{q:"برای خشک کردن دیگران خودش خیس میشه؟",a:"حوله"},{q:"پر از سوراخه ولی آب نگه میداره؟",a:"اسفنج"}],
+ hafez: ["دل می‌رود ز دستم صاحب دلان خدا را - دردا که راز پنهان خواهد شد آشکارا","سینه مالامال درد است ای دریغا مرهمی - دل ز تنهایی به جان آمد خدا را همدمی"],
+ love: ["دوست داشتن یعنی تو شلوغ‌ترین روز هم وقت شنیدن داشته باشی","کنار تو اتفاقای معمولی هم ارزش خاطره شدن دارن","محبت گاهی یه پیام ساده‌ست: رسیدی خبرم کن"],
+ motivation: ["امروز فقط یه قدم کوچیک بردار","استراحت بخشی از مسیره نه مدرک شکست","اشتباه امروز می‌تونه اطلاعات مفید فردا باشه"],
+ facts: ["هشت‌پا سه قلب دارد","عسل هرگز فاسد نمی‌شود","نور خورشید ۸ دقیقه تا زمین می‌آید","مغز ۲۰٪ انرژی بدن را مصرف می‌کند"],
+ lessons: ["قانون ۲ دقیقه: اگر کاری زیر ۲ دقیقه‌ست همین الان انجامش بده","تکنیک پومودورو: ۲۵ دقیقه کار، ۵ دقیقه استراحت"],
+ dictionary: [
+  {word:"مرور",meaning:"دوباره دیدن برای یادآوری",ex:"امروز لغات دیروز را مرور کردم"},
+  {word:"انگیزه",meaning:"دلیل درونی برای انجام کار",ex:"انگیزه‌ات را بنویس تا یادت بماند"},
+  {word:"تمرکز",meaning:"توجه کامل به یک کار",ex:"گوشی را سایلنت کردم تا تمرکز کنم"},
+  {word:"عادت",meaning:"رفتار تکراری خودکار",ex:"هر روز ۱۰ دقیقه کتاب عادت خوبی‌ست"},
+  {word:"صبر",meaning:"تحمل با آرامش",ex:"صبر کردن هم مهارت است"},
+  {word:"هدف",meaning:"نتیجه مشخص که می‌خواهی برسی",ex:"هدف این هفته: ۳ بازی و ۲ درس"},
+  {word:"برنامه",meaning:"نقشه زمانی کارها",ex:"برنامه‌ات را شب قبل بنویس"},
+  {word:"تلاش",meaning:"کوشش پیوسته",ex:"تلاش کوچک هر روز جمع می‌شود"}
+ ],
+ quiz: [
+  {q:"پایتخت ایران؟",opts:["تهران","اصفهان","شیراز","تبریز"],a:0},
+  {q:"۲+۲*۲؟",opts:["۶","۸","۴","۱۰"],a:0},
+  {q:"بزرگترین سیاره؟",opts:["مشتری","زحل","زمین","مریخ"],a:0},
+  {q:"HTML مخفف؟",opts:["HyperText Markup Language","HighText","HyperTool","هیچکدام"],a:0},
+  {q:"کدام زبان راست به چپ است؟",opts:["فارسی","انگلیسی","فرانسه","آلمانی"],a:0}
+ ],
+ scramble: [
+  {word:"کتاب",hint:"برای خواندن"},
+  {word:"ایران",hint:"کشور ما"},
+  {word:"باران",hint:"از آسمان می‌بارد"},
+  {word:"چای",hint:"نوشیدنی گرم"},
+  {word:"خانه",hint:"محل زندگی"}
+ ]
+};
+
+const DIGITAL_QS=[
+ ["پیامی رمز یک‌بارمصرف می‌خواهد. چه می‌کنی؟",["نمی‌دهم و از مسیر رسمی چک می‌کنم","می‌فرستم","نصفش را","در گروه"],0],
+ ["2FA چه فایده‌ای دارد؟",["حتی اگر رمز لو برود جلوی ورود را می‌گیرد","سرعت","ساده می‌کند","فایده ندارد"],0],
+ ["فیشینگ چیست؟",["تقلید سایت رسمی برای سرقت","بازی","اینترنت","ویروس"],0],
+ ["بهترین جا برای نگهداری رمزهای قوی چیست؟",["مدیر رمز معتبر","یادداشت روی میز","گروه عمومی","همان رمز همه جا"],0],
+ ["بکاپ ۳-۲-۱ یعنی چه؟",["۳ نسخه، ۲ رسانه، ۱ خارج محل","۳ کپی یک پوشه","۲ رمز یکسان","۱ بار در سال"],0],
+ ["وای‌فای عمومی چه خطری دارد؟",["شنود؛ از VPN و HTTPS","همیشه امن","باتری کم می‌کند","خطری ندارد"],0],
+ ["اگر حسابت هک شد اولین قدم؟",["رمز را عوض کن و نشست‌ها را ببند","رمز را در گروه بگذار","گوشی را خاموش کن","به همه پول بفرست"],0],
+ ["لینک کوتاه ناشناس فرستاده شده، چه می‌کنی؟",["پیش‌نمایش لینک و بررسی دامنه قبل از کلیک","سریع کلیک می‌کنم","برای همه فوروارد","رمز را وارد می‌کنم"],0],
+ ["به‌روزرسانی امنیتی را چه زمانی نصب کنی؟",["فورا از منبع رسمی","هیچ‌وقت","وقتی گوشی کند شد","از کانال ناشناس"],0],
+ ["مجوزهای اپ را چگونه مدیریت می‌کنی؟",["حداقلی و فقط ضروری","همه را قبول","بدون بررسی","با اکانت دیگران"],0],
+ ["ایمیل مشکوک با پیوست exe چه می‌کنی؟",["باز نمی‌کنم و گزارش می‌دهم","باز می‌کنم","فوروارد می‌کنم","رمز می‌دهم"],0],
+ ["رمز قوی چه ویژگی دارد؟",["طولانی، تصادفی، یکتا برای هر سرویس","کوتاه و تکراری","تاریخ تولد","123456"],0],
+ ["حریم خصوصی در شبکه‌های اجتماعی؟",["تنظیمات را خصوصی و اطلاعات حساس را محدود کن","همه‌چیز عمومی","لوکیشن همیشه روشن","رمز را در بیو بگذار"],0],
+ ["چگونه اصالت یک سایت را چک کنی؟",["دامنه، گواهی HTTPS و املای درست","فقط ظاهر زیبا","تعداد تبلیغات","سرعت لود"],0],
+ ["اگر کسی خود را پشتیبانی جا زد؟",["از شماره رسمی خودت تماس بگیر و کد نده","کد را بده","دسترسی بده","پول بفرست"],0],
+ ["داده‌های حساس را کجا ذخیره کنی؟",["فضای رمزگذاری‌شده با پشتیبان","کانال عمومی","کامنت سایت","دایرکت غریبه"],0],
+ ["کلیک‌جکینگ چیست؟",["پنهان‌کردن دکمه واقعی زیر لایه فریبنده","افزایش سرعت","نوعی فونت","آنتی‌ویروس"],0],
+ ["بهترین واکنش به باج‌افزار؟",["قطع اینترنت، عدم پرداخت، بازیابی از بکاپ تمیز","پرداخت فوری","فوروارد برای همه","خاموش و فراموش"],0],
+ ["چگونه از سیم‌کارت‌سواپ جلوگیری کنی؟",["پین سیم‌کارت، احراز هویت اپراتور، هشدار تراکنش","رمز ساده","اشتراک لوکیشن","نصب اپ ناشناس"],0],
+ ["ردپای دیجیتال را چگونه کم کنی؟",["حذف حساب‌های بلااستفاده و محدودکردن مجوزها","انتشار بیشتر","استفاده از یک رمز همه‌جا","کلیک روی هر تبلیغ"],0]
+];
+
+const MAGIC_ANSWERS=["بله حتما 😊","خیر الان وقتش نیست","شاید کمی صبر کن","قطعا!","بهتره دوباره فکر کنی","نشانه‌ها مثبته","فعلا نه","با تلاش میشه"];
+
+// ===== helpers - بدون باگ =====
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2500);}
+let lastPage='home';
+function go(id){
+ lastPage=(id==='detailView'?lastPage:id);
+ document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!==id);
+ document.querySelectorAll('.nav').forEach(n=>{
+  const txt=n.textContent;
+  n.classList.toggle('active',(id==='home'&&txt.includes('خانه'))||(id==='games'&&txt.includes('بازی'))||(id==='learn'&&txt.includes('یادگیری'))||(id==='economy'&&txt.includes('اقتصاد'))||(id==='account'&&txt.includes('حساب'))||(id==='settings'&&txt.includes('تنظیمات')));
+ });
+ const gp=document.getElementById('gamePlay'); if(gp&&id!=='games') gp.hidden=true;
+ window.scrollTo(0,0);
+}
+function todayKey(){return new Date().toISOString().slice(0,10);}
+function getLS(k,def){try{const v=localStorage.getItem(k);return v?JSON.parse(v):def;}catch{return def;}}
+function setLS(k,v){localStorage.setItem(k,JSON.stringify(v));}
+function hasEarnedToday(type,id){const key=`earn_${type}_${todayKey()}`;return getLS(key,[]).includes(id);}
+function earnToday(type,id){const key=`earn_${type}_${todayKey()}`;const seen=getLS(key,[]);if(seen.includes(id))return false;seen.push(id);setLS(key,seen);return true;}
+function isSpamming(){const now=Date.now();const last=getLS('last_action',0);if(now-last<700)return true;setLS('last_action',now);return false;}
+function addCoins(n){const c=getLS('coins',1250);setLS('coins',c+n);updateCoins();}
+function updateCoins(){
+ const c=getLS('coins',1250); const x=getLS('xp',870);
+ ['coinHome','coinEcon','coinVal'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=c;});
+ ['xpHome','xpVal'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=x;});
+ document.getElementById('gameHome').textContent=getLS('gamesPlayed',0);
+}
+function getNoRepeat(cat,all){const key=`norepeat_${cat}`;let rem=getLS(key,null);if(!rem||!rem.length)rem=[...all].sort(()=>Math.random()-0.5);return rem;}
+function popNoRepeat(cat,all){let rem=getNoRepeat(cat,all);const id=rem.pop();setLS(`norepeat_${cat}`,rem);return id;}
+
+// font
+function applyFont(n){
+ const map={'Vazirmatn':"'Vazirmatn',Tahoma",'Lalezar':"'Lalezar',Vazirmatn"};
+ document.body.style.fontFamily=map[n]||map['Vazirmatn'];
+ localStorage.setItem('chatipati_font',n);
+ const el=document.getElementById('fontNote'); if(el)el.textContent='فونت: '+n;
+}
+const sf=localStorage.getItem('chatipati_font'); if(sf) applyFont(sf);
+
+// detail
+function openDetail(title,sub,html){
+ document.getElementById('detailTitle').textContent=title;
+ document.getElementById('detailSub').textContent=sub;
+ document.getElementById('detailBody').innerHTML=html;
+ go('detailView');
+}
+function openContent(cat){
+ const labels={joke:'جوک',riddle:'معما',hafez:'فال حافظ',love:'عاشقانه',motivation:'انگیزشی',fact:'دانستنی',lesson:'درس'};
+ const arr={joke:DATA.jokes,riddle:DATA.riddles.map(r=>r.q+' - جواب: '+r.a),hafez:DATA.hafez,love:DATA.love,motivation:DATA.motivation,fact:DATA.facts,lesson:DATA.lessons}[cat]||[];
+ if(!arr.length){toast('محتوا نیست');return;}
+ const allIdx=arr.map((_,i)=>i);
+ const idx=popNoRepeat(cat,allIdx);
+ const text=arr[idx];
+ const saved=getLS('saved_contents',[]);
+ const isSaved=saved.includes(cat+'_'+idx);
+ openDetail(labels[cat]||cat,`${idx+1}/${arr.length}`,`<div style="font-size:15px;line-height:2">${text}</div><div style="margin-top:12px;display:flex;gap:8px"><button class="primary" onclick="saveContent('${cat}',${idx})">${isSaved?'✅ ذخیره شد':'💾 ذخیره'}</button><button class="secondary" onclick="openContent('${cat}')">بعدی</button></div>`);
+ if(earnToday('content',cat+'_'+idx)){addCoins(5);toast('+۵ سکه');}
+}
+function saveContent(cat,idx){
+ const key=cat+'_'+idx; let saved=getLS('saved_contents',[]);
+ if(!saved.includes(key)){saved.push(key);setLS('saved_contents',saved);toast('ذخیره شد');renderSaved();}
+}
+function unsaveContent(key){let s=getLS('saved_contents',[]);s=s.filter(x=>x!==key);setLS('saved_contents',s);renderSaved();toast('حذف شد');}
+function renderSaved(){
+ const el=document.getElementById('savedList'); if(!el) return;
+ const saved=getLS('saved_contents',[]);
+ if(!saved.length){el.innerHTML='<div class="note">هنوز چیزی ذخیره نکردی</div>';return;}
+ el.innerHTML=saved.map(k=>{
+  const [cat,idx]=k.split('_'); const map={joke:DATA.jokes,riddle:DATA.riddles.map(r=>r.q),hafez:DATA.hafez,love:DATA.love,motivation:DATA.motivation,fact:DATA.facts,lesson:DATA.lessons};
+  const txt=(map[cat]&&map[cat][parseInt(idx)])||k;
+  return `<div style="border-bottom:1px solid #b9a27433;padding:8px 0;display:flex;justify-content:space-between;gap:8px"><span>${txt}</span><button class="secondary" onclick="unsaveContent('${k}')">حذف</button></div>`;
+ }).join('');
+}
+function doSearch(){
+ const q=document.getElementById('searchInput').value.trim(); if(!q){toast('چیزی بنویس');return;}
+ const all=[...DATA.jokes,...DATA.love,...DATA.motivation,...DATA.facts,...DATA.lessons,...DATA.hafez];
+ const res=all.filter(t=>t.includes(q)).slice(0,10);
+ document.getElementById('searchRes').innerHTML=res.length?res.map(r=>`<div style="padding:8px;border-bottom:1px solid #ffffff11">${r}</div>`).join(''):'<div class="note">چیزی پیدا نشد</div>';
+}
+function renderContent(){
+ const grid=document.getElementById('contentGrid'); if(!grid) return;
+ const cats=[{id:'joke',icon:'😂',name:'جوک',desc:'خنده‌دار'},{id:'riddle',icon:'🧩',name:'معما',desc:'فکری'},{id:'hafez',icon:'📜',name:'فال حافظ',desc:'حافظ'},{id:'love',icon:'❤️',name:'عاشقانه',desc:'احساسی'},{id:'motivation',icon:'🔥',name:'انگیزشی',desc:'انرژی'},{id:'fact',icon:'💡',name:'دانستنی',desc:'جالب'},{id:'lesson',icon:'📘',name:'درس',desc:'کاربردی'}];
+ grid.innerHTML=cats.map(c=>`<div class="card" onclick="openContent('${c.id}')"><span class="icon">${c.icon}</span><h4>${c.name}</h4><p>${c.desc}</p></div>`).join('');
+}
+
+// learn
+function openLearn(type){
+ if(type==='word'){
+  const allIdx=DATA.dictionary.map((_,i)=>i); const idx=popNoRepeat('word',allIdx); const w=DATA.dictionary[idx];
+  openDetail('📖 کلمه امروز',w.word,`<div style="font-size:18px;color:var(--gold)">${w.word}</div><div style="margin-top:8px">معنی: ${w.meaning}</div><div class="note">مثال: ${w.ex}</div><div style="margin-top:12px;display:flex;gap:8px"><button class="primary" onclick="addToVocab(${idx})">➕ به جعبه</button><button class="secondary" onclick="openLearn('word')">بعدی</button></div>`);
+  if(earnToday('learn','word_'+idx)){addCoins(10);toast('+۱۰ سکه');}
+ }else if(type==='lesson'){
+  const idx=popNoRepeat('lesson',DATA.lessons.map((_,i)=>i)); openDetail('📘 درس امروز','',`<div>${DATA.lessons[idx]}</div><button class="secondary" style="margin-top:10px" onclick="openLearn('lesson')">بعدی</button>`);
+ }else if(type==='fact'){
+  const idx=popNoRepeat('fact',DATA.facts.map((_,i)=>i)); openDetail('💡 دانستنی امروز','',`<div>${DATA.facts[idx]}</div><button class="secondary" style="margin-top:10px" onclick="openLearn('fact')">بعدی</button>`);
+ }else if(type==='vocab'){
+  const vocab=getLS('vocab',[]); if(!vocab.length){openDetail('🗃️ جعبه مرور','','<div class="note">خالیه - از کلمه امروز اضافه کن</div>');return;}
+  const html=vocab.map(i=>{const w=DATA.dictionary[i];return `<div style="padding:8px;border-bottom:1px solid #ffffff11">${w.word} - ${w.meaning}</div>`;}).join('');
+  openDetail('🗃️ جعبه مرور',`${vocab.length} لغت`,html+`<button class="secondary" style="margin-top:10px" onclick="setLS('vocab',[]);openLearn('vocab')">پاک کردن</button>`);
+ }else if(type==='dictionary'){
+  openDetail('📚 واژه‌نامه','','<input id="dictInput" class="input" placeholder="جستجوی لغت..."><button class="primary" style="width:100%;margin-top:8px" onclick="searchDict()">جستجو</button><div id="dictRes" style="margin-top:10px"></div>');
+ }else if(type==='stats'){
+  const played=getLS('gamesPlayed',0); openDetail('📊 آمار یادگیری','',`<p>بازی‌ها: ${played}</p><p>لغات ذخیره: ${getLS('vocab',[]).length}</p><p>سکه: ${getLS('coins',1250)}</p>`);
+ }else if(type==='learnquiz'){
+  openGame('quiz');
+ }
+}
+function addToVocab(idx){let v=getLS('vocab',[]);if(!v.includes(idx)){v.push(idx);setLS('vocab',v);toast('به جعبه اضافه شد');}}
+function searchDict(){
+ const q=document.getElementById('dictInput').value.trim().toLowerCase(); if(!q)return;
+ const res=DATA.dictionary.filter(w=>w.word.includes(q)||w.meaning.includes(q)).slice(0,8);
+ document.getElementById('dictRes').innerHTML=res.map((w,i)=>`<div style="padding:8px;border-bottom:1px solid #ffffff11;display:flex;justify-content:space-between"><span>${w.word} - ${w.meaning}</span><button class="secondary" onclick="addToVocab(${DATA.dictionary.indexOf(w)})">+</button></div>`).join('')||'<div class="note">پیدا نشد</div>';
+}
+function renderLearn(){
+ const grid=document.getElementById('learnGrid'); if(!grid)return;
+ const items=[{id:'word',icon:'📖',name:'کلمه امروز',desc:'لغت جدید'},{id:'lesson',icon:'📘',name:'درس امروز',desc:'کاربردی'},{id:'fact',icon:'💡',name:'دانستنی',desc:'جالب'},{id:'vocab',icon:'🗃️',name:'جعبه مرور',desc:'لغات من'},{id:'dictionary',icon:'📚',name:'واژه‌نامه',desc:'جستجو'},{id:'learnquiz',icon:'🧠',name:'آزمون',desc:'یادگیری'},{id:'stats',icon:'📊',name:'آمار',desc:'پیشرفت'}];
+ grid.innerHTML=items.map(c=>`<div class="card" onclick="openLearn('${c.id}')"><span class="icon">${c.icon}</span><h4>${c.name}</h4><p>${c.desc}</p></div>`).join('');
+}
+
+// economy
+const SHOP=[{id:'theme_gold',name:'تم طلایی',price:200,icon:'🎨'},{id:'avatar_crown',name:'تاج',price:150,icon:'👑'},{id:'sticker',name:'استیکر پک',price:100,icon:'⭐'}];
+function renderShop(){
+ const grid=document.getElementById('shopGrid'); if(!grid)return;
+ const owned=getLS('owned_items',[]);
+ grid.innerHTML=SHOP.map(it=>`<div class="card"><span class="icon">${it.icon}</span><h4>${it.name}</h4><p>${it.price} سکه</p><button class="primary" style="margin-top:8px" onclick="buyItem('${it.id}',${it.price})">${owned.includes(it.id)?'✅ دارید':'خرید'}</button></div>`).join('');
+}
+function buyItem(id,price){
+ const owned=getLS('owned_items',[]); if(owned.includes(id)){toast('قبلا خریدی');return;}
+ const coins=getLS('coins',1250); if(coins<price){toast('سکه کمه');return;}
+ setLS('coins',coins-price); owned.push(id); setLS('owned_items',owned); updateCoins(); renderShop(); toast('خرید شد ✅');
+}
+function claimDaily(){
+ if(earnToday('econ','daily')){addCoins(50);toast('🎁 +۵۰ سکه روزانه');document.getElementById('earnToday').textContent='50';}else toast('امروز گرفتی');
+}
+
+// tools
+const TOOLS=[{id:'calc',icon:'🧮',name:'ماشین حساب'},{id:'random',icon:'🎲',name:'عدد تصادفی'},{id:'choose',icon:'🎯',name:'انتخاب تصادفی'},{id:'password',icon:'🔑',name:'رمزساز'},{id:'date',icon:'📅',name:'تاریخ'},{id:'note',icon:'📝',name:'یادداشت'},{id:'todo',icon:'✅',name:'کارها'}];
+function renderTools(){
+ const grid=document.getElementById('toolsGrid'); if(!grid)return;
+ grid.innerHTML=TOOLS.map(t=>`<div class="card" onclick="openTool('${t.id}')"><span class="icon">${t.icon}</span><h4>${t.name}</h4></div>`).join('');
+}
+function openTool(id){
+ const box=document.getElementById('toolPlay');
+ if(id==='calc'){
+  box.innerHTML=`<div class="panel"><h3>ماشین حساب</h3><input id="calcIn" class="input ltr" placeholder="مثلا 12*3+5"><button class="primary" style="width:100%;margin-top:8px" onclick="calcNow()">محاسبه</button><p id="calcOut" style="text-align:center;font-size:18px"></p></div>`;
+ }else if(id==='random'){
+  box.innerHTML=`<div class="panel"><h3>عدد تصادفی</h3><div style="display:flex;gap:8px"><input id="rMin" class="input ltr" placeholder="از" value="1"><input id="rMax" class="input ltr" placeholder="تا" value="100"></div><button class="primary" style="width:100%;margin-top:8px" onclick="genRandom()">بساز</button><p id="rOut" style="text-align:center;font-size:24px;color:var(--teal)"></p></div>`;
+ }else if(id==='choose'){
+  box.innerHTML=`<div class="panel"><h3>انتخاب تصادفی</h3><textarea id="chooseIn" class="input" rows="4" placeholder="هر خط یک گزینه"></textarea><button class="primary" style="width:100%;margin-top:8px" onclick="chooseRandom()">انتخاب</button><p id="chooseOut" style="text-align:center"></p></div>`;
+ }else if(id==='password'){
+  box.innerHTML=`<div class="panel"><h3>رمزساز</h3><button class="primary" style="width:100%" onclick="genPass()">ساخت رمز 12 کاراکتری</button><p id="passOut" style="text-align:center;direction:ltr;font-family:monospace"></p></div>`;
+ }else if(id==='date'){
+  box.innerHTML=`<div class="panel"><h3>تاریخ امروز</h3><p id="dateOut" style="text-align:center">${new Date().toLocaleDateString('fa-IR')}</p><p style="text-align:center;direction:ltr">${new Date().toString()}</p></div>`;
+ }else if(id==='note'){
+  box.innerHTML=`<div class="panel"><h3>یادداشت</h3><textarea id="noteIn" class="input" rows="3" placeholder="یادداشت..."></textarea><button class="primary" style="width:100%;margin-top:8px" onclick="addNote()">ذخیره</button><div id="noteList" style="margin-top:10px"></div></div>`;renderNotes();
+ }else if(id==='todo'){
+  box.innerHTML=`<div class="panel"><h3>کارها</h3><input id="todoIn" class="input" placeholder="کار جدید"><button class="primary" style="width:100%;margin-top:8px" onclick="addTodo()">افزودن</button><div id="todoList" style="margin-top:10px"></div></div>`;renderTodos();
+ }
+ box.scrollIntoView({behavior:'smooth'});
+}
+function calcNow(){
+ const v=document.getElementById('calcIn').value; if(!/^[0-9+\-*/().\s]+$/.test(v)){document.getElementById('calcOut').textContent='فقط عدد و +-*/';return;}
+ try{document.getElementById('calcOut').textContent=Function('"use strict";return ('+v+')')();}catch(e){document.getElementById('calcOut').textContent='خطا';}
+}
+function genRandom(){const min=parseInt(document.getElementById('rMin').value)||1;const max=parseInt(document.getElementById('rMax').value)||100;document.getElementById('rOut').textContent=Math.floor(Math.random()*(max-min+1))+min;}
+function chooseRandom(){const lines=document.getElementById('chooseIn').value.split('\n').filter(x=>x.trim());if(!lines.length)return;document.getElementById('chooseOut').textContent='👉 '+lines[Math.floor(Math.random()*lines.length)];}
+function genPass(){const chars='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#';let p='';for(let i=0;i<12;i++)p+=chars[Math.floor(Math.random()*chars.length)];document.getElementById('passOut').textContent=p;}
+function renderNotes(){const el=document.getElementById('noteList'); if(!el)return; const notes=getLS('notes',[]); el.innerHTML=notes.map((n,i)=>`<div style="display:flex;justify-content:space-between;padding:6px;border-bottom:1px solid #ffffff11"><span>${n}</span><button class="secondary" onclick="delNote(${i})">حذف</button></div>`).join('');}
+function addNote(){const v=document.getElementById('noteIn').value.trim();if(!v)return;const notes=getLS('notes',[]);notes.push(v);setLS('notes',notes);document.getElementById('noteIn').value='';renderNotes();}
+function delNote(i){let notes=getLS('notes',[]);notes.splice(i,1);setLS('notes',notes);renderNotes();}
+function renderTodos(){const el=document.getElementById('todoList'); if(!el)return; const todos=getLS('todos',[]); el.innerHTML=todos.map((t,i)=>`<div style="display:flex;justify-content:space-between;padding:6px;border-bottom:1px solid #ffffff11"><span>${t}</span><button class="secondary" onclick="delTodo(${i})">حذف</button></div>`).join('');}
+function addTodo(){const v=document.getElementById('todoIn').value.trim();if(!v)return;const todos=getLS('todos',[]);todos.push(v);setLS('todos',todos);document.getElementById('todoIn').value='';renderTodos();}
+function delTodo(i){let todos=getLS('todos',[]);todos.splice(i,1);setLS('todos',todos);renderTodos();}
+
+// account
+function saveName(){const v=document.getElementById('nameInput').value.trim();if(!v){toast('اسم بنویس');return;}setLS('display_name',v);document.getElementById('profName').textContent=v;document.getElementById('loginArea').hidden=true;document.getElementById('prof').hidden=false;toast('ذخیره شد');}
+function loadAccount(){
+ const name=getLS('display_name',null); if(name){document.getElementById('loginArea').hidden=true;document.getElementById('prof').hidden=false;document.getElementById('profName').textContent=name;}
+ const uid=getLS('chatipati_uid',null)||('u_'+Math.random().toString(36).slice(2,9)); setLS('chatipati_uid',uid); document.getElementById('myId').textContent=uid;
+ const join=getLS('join_date',null)||new Date().toISOString().slice(0,10); setLS('join_date',join); document.getElementById('joinDate').textContent=join;
+ renderSaved();
+}
+function resetAll(){if(confirm('همه چیز پاک شود؟')){localStorage.clear();location.reload();}}
+function selectFinal(w){setLS('finalChoice',w);document.getElementById('finalChoice').textContent='انتخاب: '+(w==='cyrus'?'کوروش 👑':'آناهیتا 🌊');toast('ذخیره شد');}
+
+// games
+function renderGames(){
+ const grid=document.getElementById('gamesGrid'); if(!grid)return;
+ const games=[
+  {id:'coin',icon:'🪙',name:'شیر یا خط',desc:'۵۰ سکه روزانه'},
+  {id:'magic',icon:'🔮',name:'گوی جادویی',desc:'پیشگویی'},
+  {id:'rps',icon:'✊',name:'سنگ کاغذ قیچی',desc:'رقابت'},
+  {id:'dice',icon:'🎲',name:'تاس',desc:'حدس ۱-۶'},
+  {id:'guess',icon:'🔢',name:'حدس عدد',desc:'۱-۱۰۰'},
+  {id:'quiz',icon:'🧠',name:'آزمون',desc:'۵ سوال'},
+  {id:'digital',icon:'🛡️',name:'سواد دیجیتال',desc:'۲۰ سوال'},
+  {id:'sequence',icon:'🔗',name:'الگوی اعداد',desc:'هوش'},
+  {id:'scramble',icon:'🔤',name:'کلمه درهم',desc:'واژه'},
+  {id:'compare',icon:'⚖️',name:'عدد بزرگتر',desc:'سرعت'},
+  {id:'odd',icon:'👁️',name:'متفاوت',desc:'دقت'},
+  {id:'ttt',icon:'⭕',name:'دوز',desc:'۳ سطح واقعی'},
+  {id:'mafia',icon:'🕵️',name:'مافیا',desc:'استنتاج'},
+  {id:'cases',icon:'💼',name:'پرونده‌ها',desc:'معمایی'}
+ ];
+ grid.innerHTML=games.map(g=>`<div class="card" onclick="openGame('${g.id}')"><span class="icon">${g.icon}</span><h4>${g.name}</h4><p>${g.desc}</p></div>`).join('');
+}
+let guessTarget=null,guessAttempts=0;
+let tBoard='.........',tDifficulty='medium',tGameOver=false;
+
+function openGame(id){
+ if(isSpamming()){toast('کمی صبر...');return;}
+ const box=document.getElementById('gamePlay'); const title=document.getElementById('gpTitle'); const gp=document.getElementById('gpBox');
+ box.hidden=false; box.scrollIntoView({behavior:'smooth'});
+ try{
+  if(id==='coin'){
+   title.textContent='🪙 شیر یا خط';
+   gp.innerHTML=`<div style="text-align:center;font-size:56px" id="coinIcon">🪙</div><p id="coinText" style="text-align:center">بزن بنداز</p><button class="primary" style="width:100%" onclick="playCoin()">بنداز</button>`;
+   window.playCoin=()=>{
+    if(isSpamming())return;
+    const flip=Math.random()<0.5?'شیر':'خط';
+    document.getElementById('coinIcon').textContent=flip==='شیر'?'🦁':'👑';
+    document.getElementById('coinText').textContent=flip;
+    if(earnToday('coin','daily')){addCoins(25);setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();toast('🎁 +۲۵ سکه!');}else toast(flip+' - امروز گرفتی');
+   };
+  }else if(id==='magic'){
+   title.textContent='🔮 گوی جادویی';
+   gp.innerHTML=`<button class="primary" style="width:100%" onclick="playMagic()">بپرس 🔮</button><p id="magicAns" style="text-align:center;font-size:20px;margin-top:14px;color:var(--teal)"></p>`;
+   window.playMagic=()=>{
+    const ans=MAGIC_ANSWERS[Math.floor(Math.random()*MAGIC_ANSWERS.length)];
+    document.getElementById('magicAns').textContent=ans;
+    if(earnToday('magic',todayKey())){setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();toast('+۵ XP');}
+   };
+  }else if(id==='rps'){
+   title.textContent='✊ سنگ کاغذ قیچی';
+   gp.innerHTML=`<div style="display:flex;gap:8px"><button class="primary" onclick="playRPS('سنگ')">✊ سنگ</button><button class="primary" onclick="playRPS('کاغذ')">✋ کاغذ</button><button class="primary" onclick="playRPS('قیچی')">✌️ قیچی</button></div><p id="rpsRes" style="text-align:center;margin-top:12px;font-weight:bold"></p>`;
+   window.playRPS=(user)=>{
+    const opts=['سنگ','کاغذ','قیچی']; const bot=opts[Math.floor(Math.random()*3)]; let win=false,txt='';
+    if(user===bot) txt=`مساوی! هر دو ${user}`;
+    else if((user==='سنگ'&&bot==='قیچی')||(user==='کاغذ'&&bot==='سنگ')||(user==='قیچی'&&bot==='کاغذ')){txt=`بردی! ${user} vs ${bot}`;win=true;}
+    else txt=`باختی! ${user} vs ${bot}`;
+    document.getElementById('rpsRes').textContent=txt;
+    if(win&&earnToday('rps','daily')){addCoins(10);toast('🏆 +۱۰ سکه');}else toast(txt);
+    setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();
+   };
+  }else if(id==='dice'){
+   title.textContent='🎲 تاس';
+   gp.innerHTML=`<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center">${[1,2,3,4,5,6].map(n=>`<button class="secondary" onclick="playDice(${n})">${n}</button>`).join('')}</div><p id="diceRes" style="text-align:center;font-size:22px;margin-top:12px"></p>`;
+   window.playDice=(guess)=>{
+    const roll=Math.floor(Math.random()*6)+1;
+    document.getElementById('diceRes').textContent=`تاس: ${roll} ${guess===roll?'✅ درست!':'❌ غلط'}`;
+    if(guess===roll&&earnToday('dice','daily')){addCoins(10);toast('+۱۰ سکه');}
+    setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();
+   };
+  }else if(id==='guess'){
+   title.textContent='🔢 حدس عدد ۱-۱۰۰';
+   if(!guessTarget){guessTarget=Math.floor(Math.random()*100)+1;guessAttempts=0;}
+   gp.innerHTML=`<input id="guessInput" class="input ltr" type="number" min="1" max="100" placeholder="۱-۱۰۰"><button class="primary" style="width:100%;margin-top:8px" onclick="playGuess()">حدس</button><p id="guessRes" style="text-align:center"></p><p style="text-align:center">تلاش: <span id="guessAtt">${guessAttempts}</span></p>`;
+   window.playGuess=()=>{
+    const v=parseInt(document.getElementById('guessInput').value); if(!v||v<1||v>100){toast('۱ تا ۱۰۰');return;}
+    guessAttempts++;document.getElementById('guessAtt').textContent=guessAttempts;
+    if(v===guessTarget){document.getElementById('guessRes').textContent=`🎉 درست! ${guessTarget} با ${guessAttempts} تلاش`; if(earnToday('guess','daily')){addCoins(20);toast('+۲۰ سکه');} guessTarget=Math.floor(Math.random()*100)+1;guessAttempts=0; setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();}
+    else if(v<guessTarget) document.getElementById('guessRes').textContent='بزرگتره ⬆️'; else document.getElementById('guessRes').textContent='کوچکتره ⬇️';
+   };
+  }else if(id==='quiz'){
+   title.textContent='🧠 آزمون';
+   const all=DATA.quiz.map((_,i)=>i); const qIdx=popNoRepeat('quiz',all); const q=DATA.quiz[qIdx];
+   const opts=[...q.opts].map((o,i)=>({o,i})).sort(()=>Math.random()-0.5);
+   const ansPos=opts.findIndex(x=>x.i===q.a);
+   gp.innerHTML=`<p style="font-size:14px">${q.q}</p><div style="display:grid;gap:8px">${opts.map((x,i)=>`<button class="secondary" style="text-align:right" onclick="checkQuiz(${i},${ansPos},${qIdx})">${x.o}</button>`).join('')}</div><button class="secondary" style="width:100%;margin-top:10px" onclick="openGame('quiz')">بعدی</button>`;
+   window.checkQuiz=(chosen,correct,idx)=>{
+    if(chosen===correct){if(earnToday('quiz',idx)){addCoins(12);toast('✅ +۱۲ سکه');}else toast('✅ درست!');}else toast('❌ غلط');
+    setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();
+   };
+  }else if(id==='digital'){
+   title.textContent='🛡️ سواد دیجیتال - ۲۰ سوال';
+   let didx=getLS('digital_idx',0);
+   function showQ(){
+    if(didx>=DIGITAL_QS.length){gp.innerHTML='<p>تموم شد! 🎉</p><button class="secondary" onclick="setLS(\'digital_idx\',0);openGame(\'digital\')">دوباره</button>';setLS('digital_idx',0);return;}
+    const q=DIGITAL_QS[didx];
+    gp.innerHTML=`<p><small>${didx+1}/20</small><br><strong>${q[0]}</strong></p><div style="display:grid;gap:8px">${q[1].map((o,i)=>`<button class="secondary" style="text-align:right" onclick="checkDigital(${i},${q[2]},${didx})">${o}</button>`).join('')}</div>`;
+   }
+   window.checkDigital=(chosen,correct,idx)=>{
+    if(chosen===correct&&earnToday('digital',idx)){addCoins(10);toast('✅ +۱۰ سکه');}else if(chosen===correct)toast('✅ درست!');else toast('❌ غلط');
+    didx++;setLS('digital_idx',didx);setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();setTimeout(showQ,600);
+   };
+   showQ();
+  }else if(id==='sequence'){
+   title.textContent='🔗 الگوی اعداد';
+   const start=Math.floor(Math.random()*10)+1; const diff=Math.floor(Math.random()*5)+1; const seq=[start,start+diff,start+2*diff,start+3*diff]; const ans=start+4*diff;
+   gp.innerHTML=`<p>بعدی چیه؟</p><p style="text-align:center;font-size:22px;letter-spacing:2px">${seq.join(' , ')} , ?</p><input id="seqInput" class="input ltr" type="number"><button class="primary" style="width:100%;margin-top:8px" onclick="checkSeq(${ans})">بررسی</button>`;
+   window.checkSeq=(ans)=>{const v=parseInt(document.getElementById('seqInput').value); if(v===ans){if(earnToday('sequence','daily')){addCoins(10);toast('+۱۰ سکه');}else toast('درست!'); openGame('sequence');}else toast('غلط'); setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();};
+  }else if(id==='scramble'){
+   title.textContent='🔤 کلمه درهم';
+   const w=DATA.scramble[Math.floor(Math.random()*DATA.scramble.length)]; const scrambled=w.word.split('').sort(()=>Math.random()-0.5).join('');
+   gp.innerHTML=`<p>راهنما: ${w.hint}</p><p style="text-align:center;font-size:28px;letter-spacing:3px">${scrambled}</p><input id="scrInput" class="input"><button class="primary" style="width:100%;margin-top:8px" onclick="checkScr('${w.word}')">بررسی</button>`;
+   window.checkScr=(correct)=>{const v=document.getElementById('scrInput').value.trim(); if(v===correct){if(earnToday('scramble','daily')){addCoins(10);toast('+۱۰ سکه');}else toast('درست!'); openGame('scramble');}else toast('غلط'); setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();};
+  }else if(id==='compare'){
+   title.textContent='⚖️ عدد بزرگتر';
+   const a=Math.floor(Math.random()*100)+1; let b=Math.floor(Math.random()*100)+1; if(a===b)b++;
+   gp.innerHTML=`<p>کدوم بزرگتره؟</p><div style="display:flex;gap:12px;justify-content:center"><button class="primary" style="font-size:26px" onclick="checkCompare(${a},${b},${a})">${a}</button><button class="primary" style="font-size:26px" onclick="checkCompare(${a},${b},${b})">${b}</button></div>`;
+   window.checkCompare=(x,y,chosen)=>{if(chosen===Math.max(x,y)){if(earnToday('compare','daily')){addCoins(5);toast('+۵ سکه');}else toast('درست!'); setTimeout(()=>openGame('compare'),600);}else toast('غلط'); setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();};
+  }else if(id==='odd'){
+   title.textContent='👁️ متفاوت';
+   const isEvenSet=Math.random()<0.5; let nums=[]; for(let i=0;i<3;i++){let n;do{n=Math.floor(Math.random()*50)*2+(isEvenSet?0:1);}while(nums.includes(n));nums.push(n);} let oddOne;do{oddOne=Math.floor(Math.random()*50)*2+(isEvenSet?1:0);}while(nums.includes(oddOne)); nums.push(oddOne); nums.sort(()=>Math.random()-0.5);
+   gp.innerHTML=`<p>${isEvenSet?'۳ زوج ۱ فرد':'۳ فرد ۱ زوج'} - متفاوت رو بزن:</p><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">${nums.map(n=>`<button class="secondary" onclick="checkOdd(${n},${oddOne})">${n}</button>`).join('')}</div>`;
+   window.checkOdd=(chosen,correct)=>{if(chosen===correct){if(earnToday('odd','daily')){addCoins(5);toast('+۵ سکه');}else toast('درست!'); setTimeout(()=>openGame('odd'),600);}else toast('غلط'); setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();};
+  }else if(id==='ttt'){
+   title.textContent='⭕ دوز - ۳ سطح واقعی';
+   gp.innerHTML=`<div style="display:flex;gap:8px;margin-bottom:8px"><button class="primary" id="tttEasy" onclick="startTTT('easy')">آسان</button><button class="primary" id="tttMed" onclick="startTTT('medium')">متوسط</button><button class="primary" id="tttHard" onclick="startTTT('hard')">سخت</button></div><div class="board" id="tttB"></div><p id="tttMsg" style="text-align:center;font-weight:bold"></p><div class="note">آسان: رندوم - متوسط: دفاع - سخت: هوشمند (وسط و گوشه)</div>`;
+   startTTT('medium');
+  }else if(id==='mafia'){
+   title.textContent='🕵️ مافیا';
+   gp.innerHTML=`<p>۳ مظنون: علی، سارا، رضا<br>سرنخ: مافیا شب بیداره<br>علی: سارا شب بیدار بود<br>سارا: من خواب بودم<br>رضا: علی دروغ میگه</p><div style="display:flex;gap:8px"><button class="secondary" onclick="checkMafia('علی')">علی</button><button class="secondary" onclick="checkMafia('سارا')">سارا</button><button class="secondary" onclick="checkMafia('رضا')">رضا</button></div>`;
+   window.checkMafia=(c)=>{if(c==='سارا'){if(earnToday('mafia','daily')){addCoins(15);toast('✅ سارا مافیاست +۱۵');}else toast('درست!');}else toast('غلط - سارا مافیاست'); setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();};
+  }else if(id==='cases'){
+   title.textContent='💼 پرونده‌ها';
+   gp.innerHTML=`<p>کدام کلید قفل را باز می‌کند؟</p><p>۳ کلید: طلایی، نقره‌ای، برنزی. فقط یکی درسته.</p><div style="display:flex;gap:8px">${['طلایی','نقره‌ای','برنزی'].map(k=>`<button class="secondary" onclick="checkCase('${k}')">${k}</button>`).join('')}</div>`;
+   window.checkCase=(k)=>{const correct='نقره‌ای'; if(k===correct){if(earnToday('cases','daily')){addCoins(15);toast('✅ درست +۱۵');}else toast('درست!');}else toast('غلط'); setLS('gamesPlayed',getLS('gamesPlayed',0)+1);updateCoins();};
+  }
+ }catch(err){toast('خطا: '+err.message);console.error(err);}
+}
+
+function startTTT(diff){
+ tDifficulty=diff; tBoard='.........'; tGameOver=false;
+ const msg=document.getElementById('tttMsg'); if(msg)msg.textContent='نوبت تو ❌ - سطح: '+diff;
+ drawTTT();
+ document.querySelectorAll('#gamePlay .primary').forEach(b=>b.style.opacity='0.6');
+ const map={easy:'tttEasy',medium:'tttMed',hard:'tttHard'}; const el=document.getElementById(map[diff]); if(el)el.style.opacity='1';
+}
+function checkWin(p,board=tBoard){
+ const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+ for(const [a,b,c] of wins){if(board[a]===p&&board[b]===p&&board[c]===p)return [a,b,c];}
+ return null;
+}
+function drawTTT(){
+ const b=document.getElementById('tttB'); if(!b)return;
+ b.innerHTML=[...tBoard].map((c,i)=>`<button class="cell" data-i="${i}">${c==='.'?'':c==='X'?'❌':'⭕'}</button>`).join('');
+ const winX=checkWin('X'); const winO=checkWin('O');
+ if(winX){document.getElementById('tttMsg').textContent='🎉 بردی! ۳ تا ❌ ردیف شد'; winX.forEach(i=>{const cell=b.querySelector(`[data-i="${i}"]`); if(cell)cell.classList.add('win');}); if(!tGameOver){tGameOver=true; if(earnToday('ttt','daily')){addCoins(15);toast('🏆 +۱۵ سکه');}} return;}
+ if(winO){document.getElementById('tttMsg').textContent='باختی! ⭕ ردیف شد'; winO.forEach(i=>{const cell=b.querySelector(`[data-i="${i}"]`); if(cell)cell.classList.add('win');}); tGameOver=true; return;}
+ if(!tBoard.includes('.')){document.getElementById('tttMsg').textContent='مساوی!'; tGameOver=true; return;}
+ b.querySelectorAll('.cell').forEach(btn=>{
+  btn.onclick=()=>{
+   if(tGameOver){toast('بازی تموم شده - سطح جدید بزن');return;}
+   if(isSpamming())return;
+   const i=parseInt(btn.dataset.i); if(tBoard[i]!=='.')return;
+   tBoard=tBoard.slice(0,i)+'X'+tBoard.slice(i+1);
+   drawTTT();
+   const winX2=checkWin('X'); if(winX2){document.getElementById('tttMsg').textContent='🎉 بردی!'; winX2.forEach(idx=>{const c=b.querySelector(`[data-i="${idx}"]`); if(c)c.classList.add('win');}); if(!tGameOver){tGameOver=true; if(earnToday('ttt','daily')){addCoins(15);toast('🏆 +۱۵');}} return;}
+   if(!tBoard.includes('.')){document.getElementById('tttMsg').textContent='مساوی!'; tGameOver=true; return;}
+   setTimeout(()=>{botMove(); drawTTT();},300);
+  };
+ });
+}
+function botMove(){
+ if(tGameOver)return;
+ const free=[...tBoard].map((c,j)=>c=='.'?j:null).filter(x=>x!==null); if(!free.length)return;
+ let bi=null;
+ if(tDifficulty==='easy'){bi=free[Math.floor(Math.random()*free.length)];}
+ else if(tDifficulty==='medium'){
+  for(const idx of free){const test=tBoard.slice(0,idx)+'O'+tBoard.slice(idx+1); if(checkWin('O',test)){bi=idx;break;}}
+  if(bi===null) for(const idx of free){const test=tBoard.slice(0,idx)+'X'+tBoard.slice(idx+1); if(checkWin('X',test)){bi=idx;break;}}
+  if(bi===null) bi=free[Math.floor(Math.random()*free.length)];
+ }else{
+  // hard: win > block > center > corners > random
+  for(const idx of free){const test=tBoard.slice(0,idx)+'O'+tBoard.slice(idx+1); if(checkWin('O',test)){bi=idx;break;}}
+  if(bi===null) for(const idx of free){const test=tBoard.slice(0,idx)+'X'+tBoard.slice(idx+1); if(checkWin('X',test)){bi=idx;break;}}
+  if(bi===null&&tBoard[4]==='.') bi=4;
+  if(bi===null){const corners=[0,2,6,8].filter(i=>tBoard[i]==='.'); if(corners.length) bi=corners[Math.floor(Math.random()*corners.length)];}
+  if(bi===null) bi=free[Math.floor(Math.random()*free.length)];
+ }
+ tBoard=tBoard.slice(0,bi)+'O'+tBoard.slice(bi+1);
+ if(checkWin('O')){document.getElementById('tttMsg').textContent='باختی! ربات برد'; tGameOver=true;}
+}
+
+// init
+function init(){
+ renderContent(); renderLearn(); renderGames(); renderShop(); renderTools(); loadAccount(); updateCoins();
+ document.getElementById('earnToday').textContent=getLS(`earn_econ_${todayKey()}`,[]).length? 'گرفتی':'0';
+}
+init();
+</script>
+</body>
+</html>
